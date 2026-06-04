@@ -1,0 +1,66 @@
+/* ============================================================
+   PLIALU — Harmonisation LÉGÈRE (Phase 1)
+   Objectif : fond sombre + header cohérent + accents INFINIMETAL
+   + typographie commune, SANS remplacer Bootstrap ni réécrire
+   les pages. Les cartes blanches existantes restent intactes et
+   parfaitement lisibles « posées » sur le fond sombre.
+   Ce fichier est chargé APRÈS le <style> propre à chaque page,
+   il ne fait que surcharger quelques propriétés ciblées.
+   ============================================================ */
+
+/* ---- Fond sombre global (frame INFINIMETAL) ---- */
+body{
+  background:var(--bg) !important;
+  color:var(--text);
+  font-family:var(--font-body) !important;
+}
+
+/* ---- Header : les deux variantes PLIALU (.navbar et .nav) ----
+   On les aligne sur la couleur de carte + bordure INFINIMETAL.  */
+.navbar,
+.nav{
+  background:var(--card) !important;
+  border-bottom:1px solid var(--border);
+  box-shadow:none !important;
+}
+.navbar-brand{color:var(--white) !important}
+
+/* Liens / boutons de nav -> accent bleu INFINIMETAL */
+.navbar-links a,
+.nav-btn{
+  color:var(--muted) !important;
+}
+.navbar-links a:hover,
+.nav-btn:hover{
+  color:var(--text) !important;
+  background:var(--card2) !important;
+}
+.navbar-links a.active,
+.nav-btn.active{
+  color:var(--white) !important;
+  background:var(--accent-lite) !important;
+  border:1px solid var(--accent-border);
+}
+
+/* ---- Accents lime (#e8fc69 / #e2fd48) -> bleu INFINIMETAL ---- */
+.card-title{border-bottom-color:var(--accent) !important}
+
+/* ---- Titres « nus » posés directement sur le fond sombre ----
+   (sinon ils resteraient en texte foncé sur fond foncé)        */
+.hero h1,
+.section-title h2,
+.page-header h1{color:var(--text) !important}
+.hero p,
+.hero .hero-badge,
+.section-title p,
+.page-header p{color:var(--muted) !important}
+
+/* La hero d'index a souvent un fond clair : on la neutralise en
+   transparent pour rester sur le fond sombre, sans casser sa mise
+   en page. */
+.hero{background:transparent !important}
+
+/* Les cartes/conteneurs blancs existants sont conservés tels quels.
+   On adoucit juste leur ombre pour le fond sombre. */
+.card,
+.module-card{box-shadow:0 1px 4px rgba(0,0,0,.35)}
