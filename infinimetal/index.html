@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>INFINIMETAL — Calculateur de Prix Tôles</title>
 <link rel="preconnect" href="https://fonts.googleapis.com/">
-<link href="./INFINIMETAL — Calculateur de Prix Tôles_files/css2" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<!-- Polices rebranchées sur le CDN Google Fonts (le dossier _files local était absent) -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<!-- Thème commun partagé avec le hub -->
+<link href="../assets/css/theme.css" rel="stylesheet">
 <style>
 :root {
   --bg:#0d1117;--card:#161b22;--card2:#1c2128;--border:#30363d;
@@ -469,8 +473,9 @@ input[type=checkbox]{width:auto;margin:0;accent-color:var(--accent)}
   #view-admin .preview-table{min-width:420px;font-size:10px}
 }
 </style>
-<script src="./INFINIMETAL — Calculateur de Prix Tôles_files/html2canvas.min.js.télécharger"></script>
-<script src="./INFINIMETAL — Calculateur de Prix Tôles_files/jspdf.umd.min.js.télécharger"></script>
+<!-- Dépendances PDF rebranchées sur CDN (le dossier _files local était absent) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -480,8 +485,8 @@ input[type=checkbox]{width:auto;margin:0;accent-color:var(--accent)}
   <div style="width:100%;max-width:400px;padding:0 24px">
     <!-- Logo -->
     <div style="text-align:center;margin-bottom:40px">
-      <img src="./INFINIMETAL — Calculateur de Prix Tôles_files/INFINI_Blanc_h5scqq.png" style="height:48px;display:inline-block" alt="Infinimetal" onerror="this.style.display=&#39;none&#39;;document.getElementById(&#39;login-title&#39;).style.display=&#39;block&#39;">
-      <div id="login-title" style="display:none;font-size:26px;font-weight:900;color:#fff;letter-spacing:.04em">INFINIMETAL</div>
+      <!-- Logo texte (l'image INFINI_Blanc locale était absente du dépôt) -->
+      <div id="login-title" style="font-size:26px;font-weight:900;color:#fff;letter-spacing:.04em">INFINIMETAL</div>
       <div style="color:#E2FD48;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-top:8px">Outil de chiffrage</div>
     </div>
     <!-- Card -->
@@ -504,12 +509,19 @@ input[type=checkbox]{width:auto;margin:0;accent-color:var(--accent)}
     <div style="text-align:center;margin-top:20px;font-size:11px;color:#374151">
       Accès réservé aux commerciaux Plialu
     </div>
+    <!-- Lien retour vers le hub central (accessible avant connexion) -->
+    <div style="text-align:center;margin-top:14px">
+      <a href="../index.html" style="color:#7d8590;font-size:12px;text-decoration:none">← Retour au hub</a>
+    </div>
   </div>
 </div>
 
 <header style="">
-  <div style="display:flex;align-items:center;gap:12px">
-    <img src="./INFINIMETAL — Calculateur de Prix Tôles_files/INFINI_Blanc_h5scqq.png" style="height:34px;display:block" alt="Infinimetal">
+  <div style="display:flex;align-items:center;gap:14px">
+    <!-- Bouton retour vers le hub central -->
+    <a href="../index.html" class="nav-btn" style="text-decoration:none" title="Retour au hub">← Hub</a>
+    <!-- Logo texte (l'image INFINI_Blanc locale était absente) -->
+    <span class="logo">INFINI<em>METAL</em></span>
   </div>
   <nav class="nav">
     <button class="nav-btn active" id="tab-commercial" onclick="showView(&#39;commercial&#39;)">

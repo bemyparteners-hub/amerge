@@ -1,0 +1,78 @@
+/* ============================================================
+   THEME COMMUN — design system extrait d'INFINIMETAL
+   Utilisé par : le hub (index.html), INFINIMETAL et l'habillage
+   léger de PLIALU. Ne contient que les tokens et composants de
+   base, pour rester non destructif vis-à-vis du CSS existant.
+   ============================================================ */
+
+:root {
+  --bg:#0d1117;
+  --card:#161b22;
+  --card2:#1c2128;
+  --border:#30363d;
+  --accent:#2563eb;
+  --accent-lite:rgba(37,99,235,0.12);
+  --accent-border:rgba(37,99,235,0.35);
+  --text:#e6edf3;
+  --muted:#7d8590;
+  --green:#3fb950;
+  --yellow:#e3b341;
+  --red:#f87171;
+  --white:#ffffff;
+  --radius:12px;
+  --radius-sm:8px;
+  --font-body:'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display:'Syne','Space Grotesk', sans-serif;
+}
+
+/* ---- Logo (réutilisé par le header INFINIMETAL et le hub) ---- */
+.logo{
+  font-family:var(--font-display);
+  font-weight:800;font-size:22px;letter-spacing:.04em;color:var(--white);
+}
+.logo em{color:var(--accent);font-style:normal}
+.logo-sub{
+  font-size:11px;font-weight:400;color:var(--muted);letter-spacing:.06em;
+  text-transform:uppercase;margin-left:10px;vertical-align:middle;
+}
+
+/* ---- Boutons (mêmes styles que INFINIMETAL) ---- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 24px;border-radius:var(--radius-sm);border:none;
+  font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;
+  transition:all .18s;text-decoration:none;
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--card2);color:var(--text)}
+
+/* ---- Carte générique ---- */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:24px;
+}
+
+/* ---- Bouton « Retour au hub » (bandeau injecté dans PLIALU) ---- */
+.hub-return-bar{
+  position:sticky;top:0;z-index:1000;
+  display:flex;align-items:center;gap:12px;
+  background:var(--card);border-bottom:1px solid var(--border);
+  padding:8px 16px;font-family:var(--font-body);
+}
+.hub-return-bar a.hub-back{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:7px;
+  border:1px solid var(--border);background:var(--card2);
+  color:var(--text);font-size:13px;font-weight:600;
+  text-decoration:none;transition:all .18s;
+}
+.hub-return-bar a.hub-back:hover{
+  border-color:var(--accent-border);background:var(--accent-lite);color:var(--white);
+}
+.hub-return-bar .hub-mod{
+  font-family:var(--font-display);font-weight:800;
+  letter-spacing:.04em;color:var(--white);font-size:15px;
+}
+.hub-return-bar .hub-mod em{color:var(--accent);font-style:normal}
