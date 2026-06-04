@@ -1,0 +1,3063 @@
+<!DOCTYPE html>
+<!-- saved from url=(0031)https://plialu-app.netlify.app/ -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INFINIMETAL — Calculateur de Prix Tôles</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./INFINIMETAL — Calculateur de Prix Tôles_files/css2" rel="stylesheet">
+<style>
+:root {
+  --bg:#0d1117;--card:#161b22;--card2:#1c2128;--border:#30363d;
+  --accent:#2563eb;--accent-lite:rgba(37,99,235,0.12);--accent-border:rgba(37,99,235,0.35);
+  --text:#e6edf3;--muted:#7d8590;--green:#3fb950;--yellow:#e3b341;--red:#f87171;--white:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;font-size:15px}
+
+/* HEADER */
+header{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:58px;position:sticky;top:0;z-index:100}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;letter-spacing:.04em;color:var(--white)}
+.logo em{color:var(--accent);font-style:normal}
+.logo-sub{font-size:11px;font-weight:400;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-left:10px;vertical-align:middle}
+.nav{display:flex;gap:4px}
+.nav-btn{padding:6px 16px;border-radius:7px;border:1px solid transparent;background:transparent;color:var(--muted);font-family:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:6px;position:relative}
+.nav-btn.active{background:var(--accent-lite);border-color:var(--accent-border);color:var(--white)}
+.nav-btn:hover:not(.active){background:var(--card2);color:var(--text)}
+.badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:none;align-items:center;justify-content:center;padding:0 4px;line-height:1;border:2px solid var(--bg)}
+.badge.show{display:flex}
+
+/* LAYOUT */
+main{max-width:1100px;margin:28px auto;padding:0 16px}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px}
+.card-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+
+/* FORM */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.span-2{grid-column:1/-1}
+.fgroup{display:flex;flex-direction:column;gap:6px}
+label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+select,input[type=number],input[type=password],input[type=text],input[type=date],textarea{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text);font-family:inherit;font-size:15px;width:100%;transition:border-color .15s}
+select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237d8590' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.15)}
+select option{background:#1c2128}
+optgroup{color:var(--muted);font-weight:600;font-size:11px}
+textarea{resize:vertical;min-height:60px;line-height:1.5}
+input[type=checkbox]{width:auto;margin:0;accent-color:var(--accent)}
+
+/* SHORTCUTS */
+.shortcuts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.shortcut-btn{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card2);color:var(--muted);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.shortcut-btn:hover{border-color:var(--accent-border);color:var(--text);background:var(--accent-lite)}
+
+/* INFO BAR */
+.info-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--muted);margin-bottom:16px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--green);box-shadow:0 0 6px var(--green)}
+.dot.yellow{background:var(--yellow);box-shadow:0 0 6px var(--yellow)}
+.info-bar strong{color:var(--text)}
+
+/* RESULT */
+.result-panel{background:linear-gradient(135deg,rgba(37,99,235,.07),rgba(37,99,235,.02));border:1px solid var(--accent-border);border-radius:12px;padding:24px;margin-top:14px}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.r-label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.r-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--white)}
+.r-value .unit{font-size:14px;font-weight:400;color:var(--muted);margin-left:3px}
+.tranche-badge{display:inline-flex;align-items:center;background:rgba(37,99,235,.15);border:1px solid var(--accent-border);color:#93c5fd;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px}
+.divider{border:none;border-top:1px solid rgba(48,54,61,.6);margin:16px 0}
+.total-row{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.total-lbl{color:var(--muted);font-size:13px;margin-bottom:4px}
+.total-desc{font-size:13px;color:var(--muted)}
+.total-price{font-family:'Syne',sans-serif;font-size:44px;font-weight:800;color:#60a5fa;line-height:1}
+.total-ht{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+.add-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;border:1px solid var(--green);background:rgba(63,185,80,.1);color:var(--green);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .18s;margin-top:16px}
+.add-btn:hover{background:rgba(63,185,80,.2);transform:translateY(-1px)}
+
+/* EMPTY */
+.empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty-icon{font-size:36px;margin-bottom:12px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 24px;border-radius:8px;border:none;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;transition:all .18s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#1d4ed8;transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--card2);color:var(--text)}
+.btn-danger{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.btn-danger:hover{background:rgba(239,68,68,.2)}
+
+/* CART TABLE */
+.cart-table{width:100%;border-collapse:collapse;font-size:13px}
+.cart-table th{text-align:left;padding:8px 10px;color:var(--muted);font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.cart-table td{padding:10px 10px;border-bottom:1px solid rgba(48,54,61,.4);vertical-align:middle}
+.cart-table tr:last-child td{border-bottom:none}
+.price-cell{text-align:right;font-weight:500}
+.remove-line{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px;border-radius:4px;transition:color .15s;font-size:16px}
+.remove-line:hover{color:var(--red)}
+.table-scroll{overflow-x:auto}
+
+/* EXTRAS */
+.extra-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(48,54,61,.4)}
+.extra-row:last-child{border-bottom:none}
+.extra-row input[type=checkbox]{width:18px;height:18px;flex-shrink:0;cursor:pointer}
+.extra-label{flex:1;cursor:pointer}
+.extra-label .el-title{font-size:14px;color:var(--text);font-weight:500}
+.extra-label .el-sub{font-size:12px;color:var(--muted)}
+.extra-amount{width:130px;flex-shrink:0}
+.extra-amount input{padding:8px 12px;font-size:14px}
+
+/* TOTALS */
+.totals-table{width:100%;font-size:14px}
+.totals-table td{padding:6px 0}
+.t-label{color:var(--muted)}
+.t-value{text-align:right;font-weight:500;color:var(--text)}
+.t-remise{color:var(--green) !important}
+.totals-divider{border:none;border-top:1px solid var(--border);margin:8px 0}
+.total-final-label{font-size:15px;font-weight:700;color:var(--text)}
+.total-final-value{text-align:right;font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:#60a5fa}
+
+/* SECTION TITLE */
+.section-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#E2FD48;color:#0E2A33;font-size:12px;font-weight:700;margin-right:8px;flex-shrink:0}
+.section-title{display:flex;align-items:center;font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:18px}
+
+/* ADMIN */
+.admin-gate{text-align:center;padding:48px 20px}
+.admin-gate h2{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;margin-bottom:8px}
+.admin-gate p{color:var(--muted);font-size:14px;margin-bottom:32px;line-height:1.6}
+.admin-gate .inner{max-width:300px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.err-msg{color:var(--red);font-size:13px}
+.stat-card{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:18px}
+.stat-num{font-family:'Syne',sans-serif;font-size:34px;font-weight:700;color:var(--yellow)}
+.stat-unit{font-size:15px;color:var(--muted);font-weight:400;margin-left:3px}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.success-msg{color:var(--green);font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px}
+.preview-table{width:100%;border-collapse:collapse;font-size:13px}
+.preview-table th{text-align:left;padding:8px 10px;color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.preview-table td{padding:8px 10px;border-bottom:1px solid rgba(48,54,61,.4)}
+.preview-table tr:last-child td{border-bottom:none}
+.preview-table .price-cell{text-align:right}
+.preview-table .price-changed{color:var(--yellow)}
+.group-header td{background:rgba(255,255,255,.02);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 10px}
+
+.actions-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding-top:20px}
+
+/* ─── RESPONSIVE MOBILE ─────────────────────────────── */
+@media(max-width:640px){
+
+  /* Structure globale */
+  main{padding:0 10px;margin:16px auto}
+
+  /* Header */
+  header{padding:0 12px;height:52px}
+  header img{height:28px}
+  .logo-sub{display:none}
+
+  /* Navigation — scroll horizontal sur mobile */
+  .nav{
+    gap:2px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:2px;
+  }
+  .nav::-webkit-scrollbar{display:none}
+  .nav-btn{
+    padding:5px 10px;
+    font-size:12px;
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+  .nav-btn svg{width:13px;height:13px}
+
+  /* Info bar */
+  .info-bar{font-size:12px;padding:7px 12px;gap:8px}
+  #bar-prix-kg{font-size:13px}
+
+  /* Grilles */
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .span-2{grid-column:1}
+
+  /* Cards */
+  .card{padding:14px 12px}
+  .card-label{font-size:10px;margin-bottom:12px}
+
+  /* Stat cards */
+  .stat-card{padding:12px}
+  .stat-num{font-size:24px}
+
+  /* Inputs */
+  input[type=number],input[type=text],input[type=password],
+  input[type=date],select,textarea{
+    font-size:16px; /* évite le zoom auto iOS */
+    padding:9px 12px;
+  }
+
+  /* Boutons */
+  .btn{padding:10px 16px;font-size:14px}
+  .btn-primary{font-size:14px}
+
+  /* Shortcuts */
+  .shortcuts{flex-wrap:wrap;gap:4px}
+  .shortcut-btn{font-size:11px;padding:4px 8px}
+
+  /* Result panel */
+  .result-panel{padding:14px 12px}
+  .result-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .total-price{font-size:28px}
+  .total-row{flex-direction:column;gap:8px;align-items:flex-start}
+  .total-row > div:last-child{text-align:left !important}
+
+  /* Add btn */
+  .add-btn{width:100%;justify-content:center;padding:13px}
+
+  /* Preview table admin */
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .preview-table{min-width:500px;font-size:11px}
+  .preview-table th,.preview-table td{padding:6px 8px}
+
+  /* Cart table */
+  .cart-table{min-width:480px;font-size:11px}
+  .cart-table th,.cart-table td{padding:6px 8px}
+
+  /* Devis picker overlay */
+  #devis-picker-overlay > div{width:92vw !important;padding:18px !important}
+
+  /* Catalogue form */
+  #catalogue-content .grid-2{grid-template-columns:1fr}
+
+  /* Admin gate */
+  .admin-gate{padding:32px 16px}
+  .admin-gate h2{font-size:20px}
+
+  /* Info bar user */
+  header > div:last-child{font-size:12px;gap:8px}
+
+  /* ── Calculateur ── */
+
+  /* Bloc taux de marge — passe en colonne sur mobile */
+  .fgroup.span-2 > div[style*="grid-template-columns:1fr 1fr"]{
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Formats rapides — horizontal scrollable */
+  .shortcuts[style*="flex-direction:column"]{
+    flex-direction:row !important;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    flex-wrap:nowrap !important;
+    padding-bottom:4px;
+  }
+
+  /* Result panel */
+  .result-panel{padding:14px 12px;margin-top:10px}
+  .result-grid{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .r-value{font-size:18px}
+  .r-label{font-size:10px}
+  .tranche-badge{font-size:11px;padding:3px 10px}
+
+  /* Total row — empilé sur mobile */
+  .total-row{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .total-row > div:last-child{
+    text-align:left !important;
+    width:100%;
+  }
+  .total-price{font-size:32px}
+  .total-lbl{font-size:13px}
+  .total-desc{font-size:11px;line-height:1.5}
+  .total-ht{font-size:11px}
+
+  /* Bouton ajouter au devis — full width */
+  .add-btn{
+    width:100%;
+    justify-content:center;
+    padding:13px 16px;
+    font-size:14px;
+    margin-top:12px;
+  }
+
+  /* RAL dropdown — pleine largeur */
+  #ral-dropdown{
+    max-height:200px;
+  }
+
+  /* RAL selected badge */
+  #ral-selected{font-size:11px}
+
+  /* Cat display */
+  #cat-display{font-size:13px;min-height:38px}
+
+  /* Bloc taux marge */
+  #view-commercial .fgroup[style*="rgba(226,253,72"]{
+    padding:12px !important;
+  }
+
+  /* ── Vue Devis ── */
+
+  /* Sidebar + form : passer en colonne sur mobile */
+  #devis-content > div[style*="display:flex;gap:16px"]{
+    flex-direction:column !important;
+    gap:12px !important;
+  }
+
+  /* Sidebar devis — pleine largeur, scroll horizontal */
+  #devis-content > div > div[style*="width:200px"]{
+    width:100% !important;
+    display:flex;
+    flex-direction:row;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    gap:8px;
+    padding-bottom:6px;
+  }
+
+  /* Cards devis dans la sidebar — taille fixe scrollable */
+  #devis-content > div > div[style*="width:200px"] > div[onclick]{
+    min-width:160px;
+    flex-shrink:0;
+    margin-bottom:0 !important;
+  }
+
+  /* Bouton nouveau devis dans sidebar */
+  #devis-content > div > div[style*="width:200px"] > button{
+    min-width:140px;
+    flex-shrink:0;
+    margin-top:0 !important;
+    white-space:nowrap;
+  }
+
+  /* Titre sidebar */
+  #devis-content > div > div[style*="width:200px"] > div[style*="font-size:10px"]{
+    display:none;
+  }
+
+  /* Cart table — scroll horizontal */
+  .cart-table{min-width:520px;font-size:11px}
+  .cart-table th,.cart-table td{padding:7px 6px}
+
+  /* Extra rows frais supplémentaires */
+  .extra-row{flex-wrap:wrap;gap:8px}
+  .extra-amount{min-width:80px}
+
+  /* Grid-3 devis info → 1 colonne */
+  .grid-3{grid-template-columns:1fr}
+
+  /* Actions bar — empilé */
+  .actions-bar{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .actions-bar .btn{
+    width:100%;
+    justify-content:center;
+  }
+
+  /* Info bar devis */
+  #view-devis .info-bar{
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  #view-devis .info-bar button{
+    margin-left:0 !important;
+    width:100%;
+    justify-content:center;
+  }
+
+  /* Section titles */
+  .section-title{font-size:13px}
+  .section-num{width:20px;height:20px;font-size:11px}
+
+  /* ── Admin ── */
+
+  /* Stat cards — pleine largeur */
+  .stat-card{padding:12px}
+  .stat-num{font-size:24px}
+  .stat-unit{font-size:13px}
+
+  /* Input prix alu — pleine largeur sur mobile */
+  .fgroup[style*="max-width:280px"]{
+    max-width:100% !important;
+  }
+
+  /* Boutons enregistrer — empilés */
+  div[style*="display:flex;align-items:center;gap:14px"]{
+    flex-direction:column;
+    align-items:stretch !important;
+    gap:10px !important;
+  }
+  div[style*="display:flex;align-items:center;gap:14px"] .btn{
+    width:100% !important;
+  }
+
+  /* Configuration matière — grid 1 colonne */
+  #view-admin .grid-2{grid-template-columns:1fr}
+
+  /* Warn banner admin */
+  #admin-warn-banner{
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:8px !important;
+  }
+  #admin-warn-banner button{
+    width:100%;
+  }
+
+  /* Admin gate */
+  .admin-gate{padding:28px 14px}
+  .admin-gate h2{font-size:18px}
+  .admin-gate .inner{max-width:100%}
+
+  /* Preview table admin — déjà géré mais renforcement */
+  #view-admin .table-scroll{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    border-radius:6px;
+  }
+
+  /* Info bar admin */
+  #view-admin .info-bar{flex-wrap:wrap;gap:6px}
+  #view-admin .info-bar button{
+    margin-left:0 !important;
+  }
+
+  /* ── Catalogue ── */
+
+  /* Formulaire catalogue — 1 colonne */
+  #catalogue-content .grid-2{
+    grid-template-columns:1fr !important;
+  }
+
+  /* Flask status */
+  #flask-status{font-size:12px;padding:10px 12px}
+
+  /* Bouton générer PDF — full width */
+  #btn-gen-catalogue{
+    width:100% !important;
+    justify-content:center;
+  }
+
+  /* Note bas de carte catalogue */
+  #catalogue-content .card > div:last-child{
+    font-size:11px;
+    line-height:1.6;
+  }
+}
+
+/* Très petits écrans (iPhone SE etc.) */
+@media(max-width:375px){
+  .nav-btn{padding:5px 8px;font-size:11px}
+  main{padding:0 8px}
+  .card{padding:12px 10px}
+  .total-price{font-size:26px}
+  .result-grid{grid-template-columns:1fr}
+  .r-value{font-size:16px}
+  .cart-table{min-width:420px;font-size:10px}
+  .extra-row{gap:6px}
+  .grid-3{grid-template-columns:1fr}
+  .stat-num{font-size:20px}
+  .admin-gate h2{font-size:16px}
+  #view-admin .preview-table{min-width:420px;font-size:10px}
+}
+</style>
+<script src="./INFINIMETAL — Calculateur de Prix Tôles_files/html2canvas.min.js.télécharger"></script>
+<script src="./INFINIMETAL — Calculateur de Prix Tôles_files/jspdf.umd.min.js.télécharger"></script>
+</head>
+<body>
+
+<!-- ─── ÉCRAN DE CONNEXION ─────────────────────────────── -->
+<div id="login-screen" style="display:none;position:fixed;inset:0;z-index:9999;
+  background:#0b1a1f;align-items:center;justify-content:center;flex-direction:column">
+  <div style="width:100%;max-width:400px;padding:0 24px">
+    <!-- Logo -->
+    <div style="text-align:center;margin-bottom:40px">
+      <img src="./INFINIMETAL — Calculateur de Prix Tôles_files/INFINI_Blanc_h5scqq.png" style="height:48px;display:inline-block" alt="Infinimetal" onerror="this.style.display=&#39;none&#39;;document.getElementById(&#39;login-title&#39;).style.display=&#39;block&#39;">
+      <div id="login-title" style="display:none;font-size:26px;font-weight:900;color:#fff;letter-spacing:.04em">INFINIMETAL</div>
+      <div style="color:#E2FD48;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-top:8px">Outil de chiffrage</div>
+    </div>
+    <!-- Card -->
+    <div style="background:#0E2A33;border:1px solid rgba(226,253,72,.15);border-radius:16px;padding:32px">
+      <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:6px">Connexion</div>
+      <div style="font-size:13px;color:#6b7280;margin-bottom:24px">Entrez votre code commercial</div>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;margin-bottom:6px">Code commercial</label>
+        <input id="login-code" type="text" placeholder="Ex : QM01" style="width:100%;box-sizing:border-box;padding:12px 14px;background:#0b1a1f;border:1px solid rgba(255,255,255,.12);
+          border-radius:8px;color:#fff;font-size:16px;font-family:inherit;text-transform:uppercase;letter-spacing:.1em;outline:none" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key===&#39;Enter&#39;)doLogin()">
+      </div>
+      <div id="login-err" style="display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);
+        border-radius:6px;padding:10px 12px;color:#f87171;font-size:13px;margin-bottom:14px"></div>
+      <button onclick="doLogin()" id="login-btn" style="width:100%;padding:13px;background:#E2FD48;border:none;border-radius:8px;
+        font-size:14px;font-weight:800;color:#0E2A33;cursor:pointer;letter-spacing:.04em;
+        font-family:inherit;transition:opacity .15s">
+        Accéder →
+      </button>
+    </div>
+    <div style="text-align:center;margin-top:20px;font-size:11px;color:#374151">
+      Accès réservé aux commerciaux Plialu
+    </div>
+  </div>
+</div>
+
+<header style="">
+  <div style="display:flex;align-items:center;gap:12px">
+    <img src="./INFINIMETAL — Calculateur de Prix Tôles_files/INFINI_Blanc_h5scqq.png" style="height:34px;display:block" alt="Infinimetal">
+  </div>
+  <nav class="nav">
+    <button class="nav-btn active" id="tab-commercial" onclick="showView(&#39;commercial&#39;)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
+      Calculer
+    </button>
+    <button class="nav-btn" id="tab-devis" onclick="showView(&#39;devis&#39;)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+      Devis
+      <span class="badge show" id="cart-badge">1</span>
+    </button>
+    <button class="nav-btn" id="tab-admin" onclick="showView(&#39;admin&#39;)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"></path></svg>
+      Admin
+    </button>
+    <button class="nav-btn" id="tab-catalogue" onclick="showView(&#39;catalogue&#39;)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      Catalogue
+    </button>
+  </nav>
+<div id="user-badge" style="display: flex; align-items: center; gap: 10px; margin-left: auto;"><span style="font-size:12px;color:#9ca3af">Bonjour, <strong style="color:#fff">Quentin Monteiro</strong></span>
+        <button onclick="doLogout()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+        border-radius:6px;color:#9ca3af;font-size:11px;padding:4px 10px;cursor:pointer;font-family:inherit">
+        Déconnexion</button></div></header>
+
+<main style="">
+  <div id="view-commercial">
+    <div class="info-bar">
+      <div class="dot" id="dot-prix"></div>
+      <span>Tarif en vigueur — Aluminium : <strong id="bar-prix-kg">3,70</strong> €/kg
+        <span id="bar-update-info" style="font-size:12px"></span>
+      </span>
+    </div>
+    <div class="card">
+      <div class="card-label">Paramètres de la tôle</div>
+      <div class="grid-2" style="gap:20px">
+
+        <div class="fgroup span-2" style="position:relative">
+          <label>Recherche par référence / RAL</label>
+          <input type="text" id="ral-search" placeholder="Ex: 7016, 9010, Brillant, Satiné..." autocomplete="off" oninput="searchRAL(this.value); if(this.value===&#39;&#39;) resetCalculateur();" onfocus="searchRAL(this.value)" onblur="setTimeout(()=&gt;hideRALList(),200)">
+          <div id="ral-dropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:200;
+            background:var(--card2);border:1px solid var(--accent-border);border-radius:8px;
+            max-height:240px;overflow-y:auto;margin-top:4px;box-shadow:0 8px 24px rgba(0,0,0,0.4)">
+          </div>
+          <div id="ral-selected" style="display:none;margin-top:6px;font-size:12px;color:var(--muted)"></div>
+        </div>
+
+        <div class="fgroup span-2" id="ep-selector-wrap" style="display:none">
+          <label>Épaisseur <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(Liste 3 — disponible en 10/10, 15/10 et 20/10)</span></label>
+          <select id="inp-ep-l3" onchange="onEpL3Change()" style="font-size:15px">
+            <option value="1.0">10/10 — 1,0 mm</option>
+            <option value="1.5" selected="">15/10 — 1,5 mm</option>
+            <option value="2.0">20/10 — 2,0 mm</option>
+          </select>
+        </div>
+        <div class="fgroup span-2">
+          <label>Catégorie de tôle <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(déterminée automatiquement par la référence sélectionnée)</span></label>
+          <div id="cat-display" style="padding:10px 14px;background:var(--card2);border:1px solid var(--accent-border);border-radius:8px;color:var(--muted);font-size:14px;min-height:42px;display:flex;align-items:center">
+            — Sélectionnez une référence ci-dessus —
+          </div>
+          <input type="hidden" id="sel-cat">
+        </div>
+        <div class="fgroup">
+          <label>Longueur (mm)</label>
+          <input type="number" id="inp-long" value="3000" min="1" step="1" oninput="calculate()">
+          <div class="shortcuts">
+            <button class="shortcut-btn" onclick="setDim(&#39;long&#39;,3000)">3000</button>
+            <button class="shortcut-btn" onclick="setDim(&#39;long&#39;,2500)">2500</button>
+            <button class="shortcut-btn" onclick="setDim(&#39;long&#39;,2000)">2000</button>
+            <button class="shortcut-btn" onclick="setDim(&#39;long&#39;,1500)">1500</button>
+          </div>
+        </div>
+        <div class="fgroup">
+          <label>Largeur (mm)</label>
+          <input type="number" id="inp-larg" value="1500" min="1" step="1" oninput="calculate()">
+          <div class="shortcuts">
+            <button class="shortcut-btn" onclick="setDim(&#39;larg&#39;,1500)">1500</button>
+            <button class="shortcut-btn" onclick="setDim(&#39;larg&#39;,1250)">1250</button>
+          </div>
+        </div>
+        <div class="fgroup">
+          <label>Nombre de tôles</label>
+          <input type="number" id="inp-qty" value="20" min="1" step="1" oninput="handleQtyInput(this)">
+        </div>
+        <div class="fgroup">
+          <label>Majoration <span style="font-size:10px;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(optionnel)</span></label>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="number" id="inp-maj" value="0" min="0" max="100" step="0.5" oninput="calculate()" style="flex:1">
+            <span style="color:var(--muted);font-size:15px;font-weight:600">%</span>
+          </div>
+          <div style="margin-top:6px;display:flex;gap:6px">
+            <button class="shortcut-btn" onclick="setMaj(0)">0%</button>
+            <button class="shortcut-btn" onclick="setMaj(5)">5%</button>
+            <button class="shortcut-btn" onclick="setMaj(10)">10%</button>
+            <button class="shortcut-btn" onclick="setMaj(15)">15%</button>
+          </div>
+        </div>
+        <div class="fgroup span-2" style="background:rgba(226,253,72,0.04);border:1px solid rgba(226,253,72,0.15);border-radius:10px;padding:14px 16px">
+          <label style="color:#E2FD48;margin-bottom:10px;display:block">Taux de marge pour ce calcul</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div>
+              <label style="font-size:10px;margin-bottom:4px;display:block">Liste 2 (%)</label>
+              <div style="display:flex;align-items:center;gap:6px">
+                <input type="number" id="inp-taux-l2" step="0.5" min="0" max="99" oninput="this.dataset.touched=&#39;1&#39;;calculate()" style="flex:1">
+                <span style="color:var(--muted);font-size:14px;font-weight:600">%</span>
+              </div>
+            </div>
+            <div>
+              <label style="font-size:10px;margin-bottom:4px;display:block">Liste 3 (%)</label>
+              <div style="display:flex;align-items:center;gap:6px">
+                <input type="number" id="inp-taux-l3" step="0.5" min="0" max="99" oninput="this.dataset.touched=&#39;1&#39;;calculate()" style="flex:1">
+                <span style="color:var(--muted);font-size:14px;font-weight:600">%</span>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px">Ces taux s'appliquent uniquement au calcul en cours. Remis aux valeurs par défaut après ajout au devis.</div>
+        </div>
+        <div class="fgroup">
+          <label>Formats rapides</label>
+          <div class="shortcuts" style="flex-direction:column;gap:6px;align-items:flex-start">
+            <button class="shortcut-btn" onclick="setFormat(3000,1500)" style="padding:6px 14px">3000 × 1500 mm</button>
+            <button class="shortcut-btn" onclick="setFormat(3000,1250)" style="padding:6px 14px">3000 × 1250 mm</button>
+            <button class="shortcut-btn" onclick="setFormat(2500,1250)" style="padding:6px 14px">2500 × 1250 mm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="result-container">
+      <div class="empty"><div class="empty-icon">📐</div><p>Sélectionnez une catégorie et renseignez les dimensions.</p></div>
+    </div>
+  </div>
+
+  <div id="view-devis" style="display:none"><div id="devis-content"></div></div>
+  <div id="view-admin" style="display:none"><div id="admin-content"></div></div>
+  <div id="view-catalogue" style="display:none"><div id="catalogue-content"></div></div>
+</main>
+
+<script>
+// ─── SOCIÉTÉ (à compléter) ───────────────────────────────
+const SOCIETE = {
+  nom:'INFINIMETAL',
+  adresse:'Technoparc Saône Vallée, 150 Route Copernic',
+  cpVille:'01390 Civrieux',
+  tel:'04 78 08 93 70',
+  email:'commercial@plialu.fr',
+  siret:'— SIRET —',
+  logo:'https://res.cloudinary.com/dyiup6v5x/image/upload/v1773920814/INFINI_Noir_bugsrg.png',
+};
+
+// ─── ARTICLES ───────────────────────────────────────────
+const ARTICLES=[
+  {code:'AL10-1013B',ral:'1013',ep:1.0,liste:1,groupe:'A',fin:'Brillant'},
+  {code:'AL15-1013B',ral:'1013',ep:1.5,liste:1,groupe:'A',fin:'Brillant'},
+  {code:'AL10-1015B',ral:'1015',ep:1.0,liste:1,groupe:'A',fin:'Brillant'},
+  {code:'AL15-1015B',ral:'1015',ep:1.5,liste:1,groupe:'A',fin:'Brillant'},
+  {code:'AL10-9010M',ral:'9010',ep:1.0,liste:1,groupe:'A',fin:'MAT'},
+  {code:'AL15-9010M',ral:'9010',ep:1.5,liste:1,groupe:'A',fin:'MAT'},
+  {code:'AL10-7016M',ral:'7016',ep:1.0,liste:1,groupe:'A',fin:'MAT'},
+  {code:'AL15-7016M',ral:'7016',ep:1.5,liste:1,groupe:'A',fin:'MAT'},
+  {code:'AL10-9001M',ral:'9001',ep:1.0,liste:1,groupe:'C',fin:'MAT'},
+  {code:'AL15-9001M',ral:'9001',ep:1.5,liste:1,groupe:'C',fin:'MAT'},
+  {code:'AL10-9016M',ral:'9016',ep:1.0,liste:1,groupe:'A',fin:'MAT'},
+  {code:'AL15-9016M',ral:'9016',ep:1.5,liste:1,groupe:'A',fin:'MAT'},
+  {code:'AL10-7035M',ral:'7035',ep:1.0,liste:1,groupe:'C',fin:'MAT'},
+  {code:'AL15-7035M',ral:'7035',ep:1.5,liste:1,groupe:'C',fin:'MAT'},
+  {code:'AL10-9006M',ral:'9006',ep:1.0,liste:1,groupe:'E',fin:'MAT'},
+  {code:'AL15-9006M',ral:'9006',ep:1.5,liste:1,groupe:'E',fin:'MAT'},
+  {code:'AL15-7005B',ral:'7005',ep:1.5,liste:2,groupe:'B',fin:'Brillant'},
+  {code:'AL15-7006B',ral:'7006',ep:1.5,liste:2,groupe:'B',fin:'Brillant'},
+  {code:'AL15-7011B',ral:'7011',ep:1.5,liste:2,groupe:'B',fin:'Brillant'},
+  {code:'AL15-7012B',ral:'7012',ep:1.5,liste:2,groupe:'B',fin:'Brillant'},
+  {code:'AL15-7021B',ral:'7021',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL15-7022B',ral:'7022',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL15-7030B',ral:'7030',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL15-7032B',ral:'7032',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL15-7037B',ral:'7037',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL15-7038B',ral:'7038',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL15-7039B',ral:'7039',ep:1.5,liste:2,groupe:'B',fin:'Brillant'},
+  {code:'AL15-7044B',ral:'7044',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL15-7047B',ral:'7047',ep:1.5,liste:2,groupe:'B',fin:'Brillant'},
+  {code:'AL15-8019B',ral:'8019',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL15-9002B',ral:'9002',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL15-9003B',ral:'9003',ep:1.5,liste:2,groupe:'B',fin:'Brillant'},
+  {code:'AL15-1019B',ral:'1019',ep:1.5,liste:2,groupe:'A',fin:'Brillant'},
+  {code:'AL-1000B',ral:'1000',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1001B',ral:'1001',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1002B',ral:'1002',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1003B',ral:'1003',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1004B',ral:'1004',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1005B',ral:'1005',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1006B',ral:'1006',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1007B',ral:'1007',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1011B',ral:'1011',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1012B',ral:'1012',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1013B',ral:'1013',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-1014B',ral:'1014',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-1015B',ral:'1015',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-1016B',ral:'1016',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1017B',ral:'1017',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-1018B',ral:'1018',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1019B',ral:'1019',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-1020B',ral:'1020',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-1021B',ral:'1021',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1023B',ral:'1023',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1024B',ral:'1024',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1027B',ral:'1027',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1028B',ral:'1028',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1032B',ral:'1032',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1033B',ral:'1033',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1034B',ral:'1034',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-1037B',ral:'1037',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-2000B',ral:'2000',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-2001B',ral:'2001',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-2002B',ral:'2002',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-2003B',ral:'2003',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-2004B',ral:'2004',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-2008B',ral:'2008',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-2009B',ral:'2009',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-2010B',ral:'2010',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-2011B',ral:'2011',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-2012B',ral:'2012',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-3000B',ral:'3000',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-3001B',ral:'3001',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3002B',ral:'3002',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3003B',ral:'3003',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-3004B',ral:'3004',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3005B',ral:'3005',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-3007B',ral:'3007',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-3009B',ral:'3009',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-3011B',ral:'3011',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3012B',ral:'3012',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3013B',ral:'3013',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3014B',ral:'3014',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3015B',ral:'3015',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3016B',ral:'3016',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3017B',ral:'3017',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3018B',ral:'3018',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3020B',ral:'3020',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-3022B',ral:'3022',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3027B',ral:'3027',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-3031B',ral:'3031',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-4001B',ral:'4001',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-4002B',ral:'4002',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-4003B',ral:'4003',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-4004B',ral:'4004',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-4005B',ral:'4005',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-4006B',ral:'4006',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-4007B',ral:'4007',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-4008B',ral:'4008',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-4009B',ral:'4009',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-4010B',ral:'4010',ep:0,liste:3,groupe:'G',fin:'Brillant'},
+  {code:'AL-5000B',ral:'5000',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5001B',ral:'5001',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5002B',ral:'5002',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5003B',ral:'5003',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5004B',ral:'5004',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5005B',ral:'5005',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5007B',ral:'5007',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5008B',ral:'5008',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5009B',ral:'5009',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5010B',ral:'5010',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5011B',ral:'5011',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5012B',ral:'5012',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5013B',ral:'5013',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5014B',ral:'5014',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5015B',ral:'5015',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5017B',ral:'5017',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5018B',ral:'5018',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5019B',ral:'5019',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5020B',ral:'5020',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5021B',ral:'5021',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-5022B',ral:'5022',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5023B',ral:'5023',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-5024B',ral:'5024',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6000B',ral:'6000',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-6001B',ral:'6001',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-6002B',ral:'6002',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-6003B',ral:'6003',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-6004B',ral:'6004',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6005B',ral:'6005',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-6006B',ral:'6006',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6007B',ral:'6007',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6008B',ral:'6008',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6009B',ral:'6009',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-6010B',ral:'6010',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6011B',ral:'6011',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6012B',ral:'6012',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6013B',ral:'6013',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6014B',ral:'6014',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6015B',ral:'6015',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6016B',ral:'6016',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6017B',ral:'6017',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6018B',ral:'6018',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-6019B',ral:'6019',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-6020B',ral:'6020',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6021B',ral:'6021',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6022B',ral:'6022',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6024B',ral:'6024',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6025B',ral:'6025',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6026B',ral:'6026',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6027B',ral:'6027',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6028B',ral:'6028',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6029B',ral:'6029',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6032B',ral:'6032',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6033B',ral:'6033',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-6034B',ral:'6034',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7000B',ral:'7000',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7001B',ral:'7001',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7002B',ral:'7002',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7003B',ral:'7003',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7004B',ral:'7004',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7005B',ral:'7005',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7006B',ral:'7006',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7008B',ral:'7008',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7009B',ral:'7009',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7010B',ral:'7010',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7011B',ral:'7011',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7012B',ral:'7012',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7013B',ral:'7013',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7015B',ral:'7015',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7016B',ral:'7016',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7021B',ral:'7021',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7022B',ral:'7022',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7023B',ral:'7023',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7024B',ral:'7024',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7026B',ral:'7026',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7030B',ral:'7030',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7031B',ral:'7031',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7032B',ral:'7032',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7033B',ral:'7033',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7034B',ral:'7034',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7035B',ral:'7035',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7036B',ral:'7036',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7037B',ral:'7037',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7038B',ral:'7038',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7039B',ral:'7039',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7040B',ral:'7040',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7042B',ral:'7042',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7043B',ral:'7043',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7044B',ral:'7044',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-7045B',ral:'7045',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7046B',ral:'7046',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-7047B',ral:'7047',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8000B',ral:'8000',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8001B',ral:'8001',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-8002B',ral:'8002',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8003B',ral:'8003',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8004B',ral:'8004',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8007B',ral:'8007',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-8008B',ral:'8008',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8011B',ral:'8011',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8012B',ral:'8012',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8014B',ral:'8014',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-8015B',ral:'8015',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8016B',ral:'8016',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8017B',ral:'8017',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-8019B',ral:'8019',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-8022B',ral:'8022',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8023B',ral:'8023',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8024B',ral:'8024',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-8025B',ral:'8025',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-8028B',ral:'8028',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-9001B',ral:'9001',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-9002B',ral:'9002',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-9003B',ral:'9003',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-9004B',ral:'9004',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-9005B',ral:'9005',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-9010B',ral:'9010',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-9011B',ral:'9011',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-9016B',ral:'9016',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-9017B',ral:'9017',ep:0,liste:3,groupe:'B',fin:'Brillant'},
+  {code:'AL-9018B',ral:'9018',ep:0,liste:3,groupe:'A',fin:'Brillant'},
+  {code:'AL-1001M',ral:'1001',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1002M',ral:'1002',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1003M',ral:'1003',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1006M',ral:'1006',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1011M',ral:'1011',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1012M',ral:'1012',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1013M',ral:'1013',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-1014M',ral:'1014',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-1015M',ral:'1015',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-1016M',ral:'1016',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1019M',ral:'1019',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-1020M',ral:'1020',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1021M',ral:'1021',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1023M',ral:'1023',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-1028M',ral:'1028',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-2000M',ral:'2000',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-2001M',ral:'2001',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-2002M',ral:'2002',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-2004M',ral:'2004',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-2008M',ral:'2008',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-2011M',ral:'2011',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-3000M',ral:'3000',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-3002M',ral:'3002',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-3003M',ral:'3003',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-3004M',ral:'3004',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-3005M',ral:'3005',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-3007M',ral:'3007',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-3009M',ral:'3009',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-3011M',ral:'3011',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-3013M',ral:'3013',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-3015M',ral:'3015',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-3020M',ral:'3020',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-3027M',ral:'3027',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-4007M',ral:'4007',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-5001M',ral:'5001',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5002M',ral:'5002',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-5003M',ral:'5003',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-5004M',ral:'5004',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5005M',ral:'5005',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5008M',ral:'5008',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5009M',ral:'5009',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5010M',ral:'5010',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-5011M',ral:'5011',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-5012M',ral:'5012',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-5013M',ral:'5013',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5014M',ral:'5014',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-5015M',ral:'5015',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-5017M',ral:'5017',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-5018M',ral:'5018',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5019M',ral:'5019',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5020M',ral:'5020',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5021M',ral:'5021',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-5022M',ral:'5022',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5023M',ral:'5023',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-5024M',ral:'5024',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6000M',ral:'6000',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-6002M',ral:'6002',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-6003M',ral:'6003',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-6004M',ral:'6004',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6005M',ral:'6005',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-6007M',ral:'6007',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6009M',ral:'6009',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-6010M',ral:'6010',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6011M',ral:'6011',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6012M',ral:'6012',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6015M',ral:'6015',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6016M',ral:'6016',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6017M',ral:'6017',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6018M',ral:'6018',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-6019M',ral:'6019',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-6020M',ral:'6020',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6021M',ral:'6021',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6022M',ral:'6022',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6024M',ral:'6024',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6025M',ral:'6025',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6027M',ral:'6027',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6028M',ral:'6028',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6029M',ral:'6029',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6031M',ral:'6031',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6033M',ral:'6033',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-6034M',ral:'6034',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7000M',ral:'7000',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7001M',ral:'7001',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7002M',ral:'7002',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7003M',ral:'7003',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7004M',ral:'7004',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7005M',ral:'7005',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7006M',ral:'7006',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-7008M',ral:'7008',ep:0,liste:3,groupe:'G',fin:'MAT'},
+  {code:'AL-7009M',ral:'7009',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7010M',ral:'7010',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7011M',ral:'7011',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7012M',ral:'7012',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7013M',ral:'7013',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7015M',ral:'7015',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7016M',ral:'7016',ep:0,liste:3,groupe:'A',fin:'MAT'},
+  {code:'AL-7021M',ral:'7021',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7022M',ral:'7022',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7023M',ral:'7023',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7024M',ral:'7024',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7026M',ral:'7026',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7030M',ral:'7030',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7031M',ral:'7031',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7032M',ral:'7032',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7033M',ral:'7033',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7034M',ral:'7034',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7035M',ral:'7035',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7036M',ral:'7036',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7037M',ral:'7037',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7038M',ral:'7038',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7039M',ral:'7039',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7040M',ral:'7040',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7042M',ral:'7042',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7043M',ral:'7043',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7044M',ral:'7044',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-7045M',ral:'7045',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7046M',ral:'7046',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-7047M',ral:'7047',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8001M',ral:'8001',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-8002M',ral:'8002',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8003M',ral:'8003',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8004M',ral:'8004',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-8007M',ral:'8007',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-8011M',ral:'8011',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8012M',ral:'8012',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8014M',ral:'8014',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-8015M',ral:'8015',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8016M',ral:'8016',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8017M',ral:'8017',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-8019M',ral:'8019',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-8022M',ral:'8022',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8023M',ral:'8023',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8024M',ral:'8024',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-8025M',ral:'8025',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-8028M',ral:'8028',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-9001M',ral:'9001',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-9002M',ral:'9002',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-9003M',ral:'9003',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-9004M',ral:'9004',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-9005M',ral:'9005',ep:0,liste:3,groupe:'A',fin:'MAT'},
+  {code:'AL-9010M',ral:'9010',ep:0,liste:3,groupe:'A',fin:'MAT'},
+  {code:'AL-9011M',ral:'9011',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-9016M',ral:'9016',ep:0,liste:3,groupe:'C',fin:'MAT'},
+  {code:'AL-9017M',ral:'9017',ep:0,liste:3,groupe:'D',fin:'MAT'},
+  {code:'AL-9018M',ral:'9018',ep:0,liste:3,groupe:'C',fin:'MAT'},
+];
+
+// ─── TARIFS ─────────────────────────────────────────────
+const BASE_PRIX_KG=3.70, MASSE_VOL=2.7, BASE_MARGE=0.10, ADMIN_PW='Plialu2025';
+const DEROULAGE_CONFIG_DEFAULT = {
+  forfait_emballage:   49,
+  forfait_deroulage:   120,
+  remise_meme_bobine:  0.50,
+  min_toles_deroulage: 30,
+  toles_par_palette:   60,
+};
+const BASE_TAUX_L1=11, BASE_TAUX_L2=11, BASE_TAUX_L3=12;
+
+// ─── SUPABASE ─────────────────────────────────────────────
+const SB_URL = 'https://nbuudjkbwqsqwtenbspc.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5idXVkamtid3FzcXd0ZW5ic3BjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNTQxMTIsImV4cCI6MjA4ODgzMDExMn0.CpeUiP-PW6dluk4Anp0Rq6EqzzLYb2g97WH2oxu5iSc';
+
+async function sbFetch(table, {method='GET', body, filters='', single=false}={}) {
+  const url = `${SB_URL}/rest/v1/${table}${filters?'?'+filters:''}`;
+  const headers = {
+    'apikey': SB_KEY,
+    'Authorization': `Bearer ${SB_KEY}`,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+  if(method==='POST') headers['Prefer'] = 'return=representation';
+  if(single) headers['Accept'] = 'application/vnd.pgrst.object+json';
+  try {
+    const res = await fetch(url, {method, headers, body: body ? JSON.stringify(body) : undefined});
+    if(!res.ok) { const t=await res.text(); console.error('Supabase error:', res.status, t); throw new Error(t); }
+    if(method==='DELETE'||res.status===204) return null;
+    return res.json();
+  } catch(e) {
+    console.error('sbFetch failed:', e);
+    throw e;
+  }
+}
+
+// ─── SESSION ──────────────────────────────────────────────
+function getSession() { try { return JSON.parse(localStorage.getItem('plialu_session')||'null'); } catch(e){return null;} }
+function setSession(s) { localStorage.setItem('plialu_session', JSON.stringify(s)); }
+function clearSession() { localStorage.removeItem('plialu_session'); }
+const SESSION_DURATION = 8 * 60 * 60 * 1000; // 8h
+const ADMIN_SESSION_DURATION = 30 * 60 * 1000; // 30 min d'inactivité
+const ADMIN_WARN_BEFORE      =  2 * 60 * 1000; // avertissement 2 min avant
+let _adminTimer     = null;
+let _adminWarnTimer = null;
+function isSessionValid(){ const s=getSession(); if(!s||!s.code||!s.loginAt)return false; return (Date.now()-s.loginAt)<SESSION_DURATION; }
+function touchSession(){ const s=getSession(); if(s){s.loginAt=Date.now();setSession(s);} }
+
+const TRANCHES=[
+  {label:'1 à 4 tôles',    surf:'4,5–19 m²',    min:1,   max:4},
+  {label:'5 à 15 tôles',   surf:'22–67 m²',     min:5,   max:15},
+  {label:'16 à 30 tôles',  surf:'72–135 m²',    min:16,  max:30},
+  {label:'31 à 59 tôles',  surf:'140–269 m²',   min:31,  max:59},
+  {label:'60 à 119 tôles', surf:'270 m²',        min:60,  max:119},
+  {label:'120 tôles +',    surf:'540 m²',        min:120, max:9999},
+];
+
+// ─── PRIX FIXES LISTE 1 ───────────────────────────────────
+// Prix de revente fixes, indépendants de la quantité
+const LISTE1_PRICES = {
+  'AL10-9010M': 16.26, 'AL15-9010M': 23.32,
+  'AL10-7016M': 16.26, 'AL15-7016M': 23.32,
+  'AL10-9001M': 16.77, 'AL15-9001M': 24.04,
+  'AL10-9016M': 16.77, 'AL15-9016M': 24.04,
+  'AL10-7035M': 16.77, 'AL15-7035M': 24.04,
+  'AL10-9006M': 16.77, 'AL15-9006M': 24.04,
+};
+
+const CATEGORIES=[
+  // ── LISTE 1 — prix fixes ──────────────────────────────
+  {id:'l1_bri10', label:'10/10 tôles RAL Brillant (1013, 1015)', group:'LISTE 1', ep:1.0, prices:[16.77,16.77,16.77,16.77,16.77,16.77]},
+  {id:'l1_bri15', label:'15/10 tôles RAL Brillant (1013, 1015)', group:'LISTE 1', ep:1.5, prices:[24.04,24.04,24.04,24.04,24.04,24.04]},
+  {id:'l1_mat10_std', label:'10/10 tôles RAL MAT (7016, 9010)',  group:'LISTE 1', ep:1.0, prices:[16.26,16.26,16.26,16.26,16.26,16.26]},
+  {id:'l1_mat15_std', label:'15/10 tôles RAL MAT (7016, 9010)',  group:'LISTE 1', ep:1.5, prices:[23.32,23.32,23.32,23.32,23.32,23.32]},
+  {id:'l1_mat10',     label:'10/10 tôles RAL MAT (autres)',       group:'LISTE 1', ep:1.0, prices:[16.77,16.77,16.77,16.77,16.77,16.77]},
+  {id:'l1_mat15',     label:'15/10 tôles RAL MAT (autres)',       group:'LISTE 1', ep:1.5, prices:[24.04,24.04,24.04,24.04,24.04,24.04]},
+  // ── PRÉLAQUÉ STOCK — Liste 2 ─────────────────────────
+  {id:'ps_br15', label:'15/10 tôles RAL Brillant', group:'PRÉLAQUÉ STOCK', ep:1.5, prices:[25.79,25.33,24.90,24.49,24.09,23.87]},
+  {id:'ps_ma15', label:'15/10 tôles RAL MAT',      group:'PRÉLAQUÉ STOCK', ep:1.5, prices:[26.11,25.64,25.19,24.76,24.36,24.16]},
+  // ── POST LAQUAGE — Liste 3 ───────────────────────────
+  {id:'pl_a15',   label:'15/10 tôles — Groupe A',       group:'POST LAQUAGE', ep:1.5, prices:[27.40,26.87,26.35,25.87,25.41,25.15]},
+  {id:'pl_bcd15', label:'15/10 tôles — Groupe B+C+D',   group:'POST LAQUAGE', ep:1.5, prices:[28.07,27.50,26.96,26.45,25.96,25.68]},
+  {id:'pl_eg15',  label:'15/10 tôles — Groupe E+G',     group:'POST LAQUAGE', ep:1.5, prices:[28.84,28.23,27.65,27.10,26.58,26.28]},
+  {id:'d10_abc',  label:'10/10 tôles — Groupes A,B,C',  group:'10/10',        ep:1.0, prices:[20.78,20.30,19.84,19.40,18.99,18.80]},
+  {id:'d10_deg',  label:'10/10 tôles — Groupes D,E,G',  group:'10/10',        ep:1.0, prices:[21.29,20.78,20.30,19.84,19.40,19.20]},
+  // ── 20/10 ────────────────────────────────────────────
+  {id:'v20_l12', label:'20/10 tôles — Liste 1 & 2',                      group:'20/10', ep:2.0, prices:[34.90,33.63,32.49,31.46,30.53,30.53]},
+  {id:'v20_l3',  label:'20/10 tôles — Liste 3 — Groupes A,B,C,D,E,G',   group:'20/10', ep:2.0, prices:[38.80,37.14,35.65,34.30,33.09,33.09]},
+];
+
+
+function articleToCatId(ep, liste, groupe, fin) {
+  // Liste 1 — prix fixes
+  if (liste === 1) {
+    if (fin === 'Brillant') return ep === 1.0 ? 'l1_bri10' : 'l1_bri15';
+    // MAT : 7016 et 9010 ont prix inférieur
+    const ralCode = window._selectedRAL?.ral || '';
+    const isStd = ['7016','9010'].includes(ralCode);
+    if (ep === 1.0) return isStd ? 'l1_mat10_std' : 'l1_mat10';
+    return isStd ? 'l1_mat15_std' : 'l1_mat15';
+  }
+  // 20/10
+  if (ep === 2.0) {
+    return (liste === 1 || liste === 2) ? 'v20_l12' : 'v20_l3';
+  }
+  // Liste 2 — 15/10
+  if (liste === 2) {
+    return fin === 'Brillant' ? 'ps_br15' : 'ps_ma15';
+  }
+  // Liste 3 — 10/10
+  if (ep === 1.0) {
+    if (['A','B','C'].includes(groupe)) return 'd10_abc';
+    return 'd10_deg';
+  }
+  // Liste 3 — 15/10
+  if (groupe === 'A') return 'pl_a15';
+  if (['B','C','D'].includes(groupe)) return 'pl_bcd15';
+  return 'pl_eg15';
+}
+
+
+// ─── STATE ───────────────────────────────────────────────
+const BASE_LAQUAGE_10=5.10;
+const BASE_LAQUAGE_15=6.70;
+const BASE_LAQUAGE_20=7.50;
+let S={
+  prixKg:BASE_PRIX_KG, lastUpdate:null, adminAuth:false,
+  laquage10:BASE_LAQUAGE_10, laquage15:BASE_LAQUAGE_15, laquage20:BASE_LAQUAGE_20,
+  deroulage:{...DEROULAGE_CONFIG_DEFAULT},
+  densite:MASSE_VOL, tauxL1:BASE_TAUX_L1, tauxL2:BASE_TAUX_L2, tauxL3:BASE_TAUX_L3, liste1Dynamique:true,
+  devisCounter:0, activeDevisId:null,
+  devis:[], // [{id,num,createdAt,cart:[],client:{},meta:{},extras:{}}]
+  defaults:{validite:15, condPaiement:'30 jours net fin de mois',
+    delaiLivraison:'7 à 15 jours ouvrés selon disponibilité',
+    prixLivraison:60, prixPalette:''},
+};
+async function makeDevis(){
+  const num=await nextDevisNum();
+  const today=new Date().toISOString().slice(0,10);
+  return {
+    id:'dv_'+Date.now(),num,createdAt:Date.now(),
+    cart:[],
+    client:{nom:'',soc:'',adr:'',ville:'',tel:'',mail:'',ref:''},
+    meta:{date:today,val:todayPlus(S.defaults.validite),
+          delai:S.defaults.delaiLivraison,pmt:S.defaults.condPaiement,notes:''},
+    extras:{liv:{on:true,val:S.defaults.prixLivraison},
+            pal:{on:false,val:S.defaults.prixPalette},
+            rem:{on:false,val:0}}
+  };
+}
+function activeDevis(){return S.devis.find(d=>d.id===S.activeDevisId)||null;}
+function storageKey(){ const s=getSession(); return s?`plialu_v2_${s.code}`:'plialu_v2_guest'; }
+function asNonNegativeNumber(v, fallback){
+  const n = Number(v);
+  return Number.isFinite(n) && n >= 0 ? n : fallback;
+}
+function loadS(){
+  // Réinitialiser l'état devis en amont, même si le storage est corrompu/invalide
+  S.devis=[]; S.activeDevisId=null; S.devisCounter=0;
+  try{
+    const d=JSON.parse(localStorage.getItem(storageKey())||'{}');
+    if(d.prixKg)S.prixKg=d.prixKg; if(d.lastUpdate)S.lastUpdate=d.lastUpdate;
+    S.laquage10=asNonNegativeNumber(d.laquage10, BASE_LAQUAGE_10);
+    S.laquage15=asNonNegativeNumber(d.laquage15, BASE_LAQUAGE_15);
+    S.laquage20=asNonNegativeNumber(d.laquage20, BASE_LAQUAGE_20);
+    if(d.deroulage) S.deroulage = Object.assign({}, DEROULAGE_CONFIG_DEFAULT, d.deroulage);
+    S.densite=asNonNegativeNumber(d.densite, MASSE_VOL);
+    S.tauxL1=asNonNegativeNumber(d.tauxL1, BASE_TAUX_L1);
+    S.tauxL2=asNonNegativeNumber(d.tauxL2, BASE_TAUX_L2);
+    S.tauxL3=asNonNegativeNumber(d.tauxL3, BASE_TAUX_L3);
+    S.liste1Dynamique=typeof d.liste1Dynamique==='boolean'?d.liste1Dynamique:true;
+    if(d.devisCounter)S.devisCounter=d.devisCounter;
+    if(d.defaults)S.defaults=Object.assign({},S.defaults,d.defaults);
+    // legacy migration: si ancien cart, on crée un devis depuis ce cart
+    if(d.cart&&d.cart.length&&!d.devis){
+      // Migration legacy : numéro local uniquement (pas de RPC pour éviter race condition au chargement)
+      S.devisCounter++;
+      saveS();
+      const _d=new Date();
+      const _num=`DEV-${String(_d.getFullYear()).slice(-2)}${String(_d.getMonth()+1).padStart(2,'0')}-${String(S.devisCounter).padStart(3,'0')}`;
+      const dv={id:'dv_'+Date.now(),num:_num,createdAt:Date.now(),cart:d.cart,
+        client:{nom:'',soc:'',adr:'',ville:'',tel:'',mail:'',ref:''},
+        meta:{date:new Date().toISOString().slice(0,10),val:'',delai:'',pmt:'',notes:''},
+        extras:{liv:{on:true,val:S.defaults.prixLivraison},pal:{on:false,val:S.defaults.prixPalette},rem:{on:false,val:0}}};
+      S.devis=[dv]; S.activeDevisId=dv.id;
+    } else if(d.devis){
+      S.devis=d.devis; S.activeDevisId=d.activeDevisId||null;
+      if(!S.devis.find(x=>x.id===S.activeDevisId)&&S.devis.length)
+        S.activeDevisId=S.devis[0].id;
+    }
+  }catch(e){}
+}
+function saveS(){try{localStorage.setItem(storageKey(),JSON.stringify({
+  prixKg:S.prixKg,lastUpdate:S.lastUpdate,devisCounter:S.devisCounter,
+  densite:S.densite,tauxL1:S.tauxL1,tauxL2:S.tauxL2,tauxL3:S.tauxL3,liste1Dynamique:S.liste1Dynamique,
+  laquage10:S.laquage10,laquage15:S.laquage15,laquage20:S.laquage20,
+  defaults:S.defaults,devis:S.devis,activeDevisId:S.activeDevisId,
+  deroulage:S.deroulage}));}catch(e){}}
+
+// ─── HELPERS ─────────────────────────────────────────────
+const f2=n=>(+n).toFixed(2).replace('.',',');
+const f3=n=>(+n).toFixed(3).replace('.',',');
+const fD=ts=>new Date(ts).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'});
+const fDT=ts=>new Date(ts).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+function tIdx(qty){for(let i=0;i<TRANCHES.length;i++)if(qty>=TRANCHES[i].min&&qty<=TRANCHES[i].max)return i;return TRANCHES.length-1;}
+// ─── MOTEUR DÉROULAGE ────────────────────────────────────
+function isDeroulageTriggered(liste, long, larg){
+  // Déroulage déclenché uniquement si format ≠ 1500×3000mm
+  // La liste n'intervient plus dans le déclenchement
+  return !(larg === 1500 && long === 3000);
+}
+
+function nbPalettes(qty){
+  const cfg = S.deroulage || DEROULAGE_CONFIG_DEFAULT;
+  return Math.ceil(qty / cfg.toles_par_palette);
+}
+
+function isMemeBobine(larg, ep, devisTarget){
+  const dv = devisTarget || activeDevis();
+  if(!dv || !dv.cart.length) return false;
+  return dv.cart.some(item => item.larg === larg && item.ep === ep);
+}
+
+function calcDeroulage(qty, larg, ep, devisTarget){
+  const cfg  = S.deroulage || DEROULAGE_CONFIG_DEFAULT;
+  const nb   = nbPalettes(qty);
+  const meme = isMemeBobine(larg, ep, devisTarget);
+  const B    = cfg.forfait_emballage * nb;
+  const C    = cfg.forfait_deroulage * nb * (meme ? cfg.remise_meme_bobine : 1);
+  return {
+    nb_palettes: nb,
+    meme_bobine: meme,
+    forfait_B:   parseFloat(B.toFixed(2)),
+    forfait_C:   parseFloat(C.toFixed(2)),
+    total:       parseFloat((B + C).toFixed(2)),
+  };
+}
+
+function inferListFromCategory(cat){
+  if(!cat) return 2;
+  if(cat.group==='LISTE 1') return 1;
+  if(cat.group==='POST LAQUAGE' || cat.group==='10/10') return 3;
+  if(cat.ep>=2.0){
+    const ralList = Number(window._selectedRAL?.liste);
+    if(ralList===3) return 3;
+    if(ralList===1 || ralList===2) return ralList;
+  }
+  return 2;
+}
+// ─── MOTEUR DE CALCUL TARIFAIRE (ancres poudre Excel) ────
+const POUDRE_REF={1.0:6.70, 1.5:6.70, 2.0:7.50};
+const COEFF_DEG={1.0:0.95, 1.5:0.95, 2.0:0.90};
+const REFS_L23=[
+  ['ps_br15',  1.5, 2, null ],
+  ['ps_ma15',  1.5, 2, 0.966],
+  ['pl_a15',   1.5, 3, 0.800],
+  ['pl_bcd15', 1.5, 3, 0.750],
+  ['pl_eg15',  1.5, 3, 0.700],
+  ['d10_abc',  1.0, 3, 0.944],
+  ['d10_deg',  1.0, 3, 0.897],
+  ['v20_l12',  2.0, 2, null ],
+  ['v20_l3',   2.0, 3, 0.850],
+];
+function calcPaliers(ep, liste, coeffGrp, prixKg, tauxL2, tauxL3){
+  const G    = COEFF_DEG[ep];
+  const taux = Math.min(
+    liste === 1 ? asNonNegativeNumber(S.tauxL1, BASE_TAUX_L1)
+    : ep >= 2.0 ? (liste === 3 ? asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3) : asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2))
+                : (liste === 3 ? tauxL3 : tauxL2),
+    99
+  );
+  const aluM2 = ep * prixKg * asNonNegativeNumber(S.densite, MASSE_VOL);
+  let ancre;
+  if (liste === 1 && ep === 1.0) {
+    ancre = asNonNegativeNumber(S.laquage10, BASE_LAQUAGE_10);
+  } else if (ep >= 2.0) {
+    ancre = asNonNegativeNumber(S.laquage20, BASE_LAQUAGE_20);
+  } else {
+    ancre = asNonNegativeNumber(S.laquage15, BASE_LAQUAGE_15);
+  }
+  const Q     = coeffGrp === null ? ancre : ancre / coeffGrp;
+  const R     = (aluM2 + Q) / (1 - taux / 100);
+  const p31   = Q / G;
+  const p16   = p31 / G;
+  const p5    = p16 / G;
+  const p1    = p5  / G;
+  return [
+    parseFloat((R + (p1  - Q)).toFixed(2)),
+    parseFloat((R + (p5  - Q)).toFixed(2)),
+    parseFloat((R + (p16 - Q)).toFixed(2)),
+    parseFloat((R + (p31 - Q)).toFixed(2)),
+    parseFloat(R.toFixed(2)),
+    parseFloat(R.toFixed(2)),
+  ];
+}
+function rebuildPrices(){
+  const prixKg = asNonNegativeNumber(S.prixKg, BASE_PRIX_KG);
+  const tauxL2 = asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2);
+  const tauxL3 = asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3);
+  REFS_L23.forEach(([id, ep, liste, coeffGrp]) => {
+    const cat = CATEGORIES.find(c => c.id === id);
+    if(cat) cat.prices = calcPaliers(ep, liste, coeffGrp, prixKg, tauxL2, tauxL3);
+  });
+  CATEGORIES.filter(c => c.group === 'LISTE 1').forEach(cat => {
+    cat.prices = calcPaliers(cat.ep, 1, null, prixKg, tauxL2, tauxL3);
+  });
+}
+function coefFromListAndEp(ep, liste){
+  const safeEp   = Number.isFinite(Number(ep))   ? Number(ep)   : 0;
+  const safeList = Number.isFinite(Number(liste)) ? Number(liste): 2;
+  if(safeList === 1) return 1 + asNonNegativeNumber(S.tauxL1, BASE_TAUX_L1) / 100;
+  if(safeList === 3) return 1 + asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3) / 100;
+  return 1 + asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2) / 100;
+}
+function getP(cat, i, listeOverride){
+  if(!cat || !Array.isArray(cat.prices)) return 0;
+  const base = Number(cat.prices[i]);
+  if(!Number.isFinite(base)) return 0;
+  if(cat.group === 'LISTE 1'){
+    const paliers = calcPaliers(
+      Number(cat.ep),
+      1,
+      null,
+      asNonNegativeNumber(S.prixKg, BASE_PRIX_KG),
+      asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2),
+      asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3)
+    );
+    return Math.max(0, paliers[paliers.length - 1] || 0);
+  }
+  return Math.max(0, base);
+}
+function getPWithTaux(cat, i, listeOverride, tauxL2Override, tauxL3Override){
+  if(!cat || !Array.isArray(cat.prices)) return 0;
+  if(cat.group === 'LISTE 1'){
+    return getP(cat, i, listeOverride);
+  }
+  // Recalcul depuis les ancres avec les taux locaux du calculateur
+  const ref = REFS_L23.find(([id]) => id === cat.id);
+  if(!ref) return getP(cat, i, listeOverride);
+  const [, ep, liste, coeffGrp] = ref;
+  const paliers = calcPaliers(ep, liste, coeffGrp,
+    asNonNegativeNumber(S.prixKg, BASE_PRIX_KG),
+    tauxL2Override,
+    tauxL3Override
+  );
+  return Math.max(0, paliers[i] || 0);
+}
+async function nextDevisNum(){
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/rpc/increment_devis_counter`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({})
+    });
+    if(!res.ok) throw new Error('RPC failed');
+    const raw = await res.json();
+    const counter = typeof raw === 'number' ? raw
+      : (Array.isArray(raw) ? raw[0]?.increment_devis_counter : raw?.increment_devis_counter);
+    if(!Number.isFinite(counter)) throw new Error('counter invalide: '+JSON.stringify(raw));
+    const d = new Date();
+    return `DEV-${String(d.getFullYear()).slice(-2)}${String(d.getMonth()+1).padStart(2,'0')}-${String(counter).padStart(3,'0')}`;
+  } catch(e) {
+    console.error('nextDevisNum fallback local:', e);
+    S.devisCounter++;
+    saveS();
+    const d = new Date();
+    return `DEV-${String(d.getFullYear()).slice(-2)}${String(d.getMonth()+1).padStart(2,'0')}-${String(S.devisCounter).padStart(3,'0')}`;
+  }
+}
+function todayPlus(n){const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
+
+// ─── CALCULATEUR ─────────────────────────────────────────
+function calculate(){
+  const inpL2 = document.getElementById('inp-taux-l2');
+  const inpL3 = document.getElementById('inp-taux-l3');
+  if(inpL2 && !inpL2.dataset.touched) inpL2.value = asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2);
+  if(inpL3 && !inpL3.dataset.touched) inpL3.value = asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3);
+  const calcTauxL2 = parseFloat(inpL2?.value) || asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2);
+  const calcTauxL3 = parseFloat(inpL3?.value) || asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3);
+  const catId=document.getElementById('sel-cat').value;
+  const long=parseFloat(document.getElementById('inp-long').value)||0;
+  const larg=parseFloat(document.getElementById('inp-larg').value)||0;
+  const qty=parseInt(document.getElementById('inp-qty').value)||0;
+  const cont=document.getElementById('result-container');
+  if(!catId||!long||!larg||!qty){cont.innerHTML=`<div class="empty"><div class="empty-icon">📐</div><p>Sélectionnez une catégorie et renseignez les dimensions.</p></div>`;return;}
+  const cat=CATEGORIES.find(c=>c.id===catId);
+  const sT=(long*larg)/1e6, sTot=sT*qty, ti=tIdx(qty);
+
+  // Pricing dynamique piloté par liste/épaisseur, avec fallback possible pour Liste 1 fixe.
+  const listeFromRal = Number(window._selectedRAL?.liste);
+  const currentListe = Number.isFinite(listeFromRal) ? listeFromRal : 2;
+  const ralCode = window._selectedRAL?.code||'';
+  const liste1Price = LISTE1_PRICES[ralCode];
+  const isListe1 = currentListe===1 && !!liste1Price;
+  const useFixedListe1 = isListe1 && S.liste1Dynamique===false;
+  // ── Déroulage : détection et validation quantité minimum ──
+  const deroulage = isDeroulageTriggered(currentListe, long, larg);
+  const cfgD = S.deroulage || DEROULAGE_CONFIG_DEFAULT;
+  // Validation largeur si déroulage déclenché : uniquement 1250 ou 1500mm
+  const LARGEURS_DEROULAGE = [1250, 1500];
+  if(deroulage && !LARGEURS_DEROULAGE.includes(larg)){
+    cont.innerHTML=`<div class="result-panel" style="border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.05)">
+      <div style="display:flex;align-items:center;gap:10px;color:#ef4444;font-weight:600;font-size:14px;margin-bottom:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Largeur non autorisée pour le déroulage
+      </div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6">
+        Le déroulage est disponible uniquement pour les largeurs
+        <strong style="color:#ef4444">1250mm</strong> et
+        <strong style="color:#ef4444">1500mm</strong>.<br>
+        Largeur saisie : <strong>${larg} mm</strong>
+      </div>
+    </div>`;
+    return;
+  }
+  if(deroulage && qty < cfgD.min_toles_deroulage){
+    cont.innerHTML=`<div class="result-panel" style="border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.05)">
+      <div style="display:flex;align-items:center;gap:10px;color:#ef4444;font-weight:600;font-size:14px;margin-bottom:8px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Quantité insuffisante pour le déroulage
+      </div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6">
+        Ce format nécessite du <strong style="color:var(--text)">déroulage</strong>
+        (format hors standard 1500×3000mm).<br>
+        Quantité minimum : <strong style="color:#ef4444">${cfgD.min_toles_deroulage} tôles</strong>
+        · Quantité saisie : <strong>${qty} tôle${qty>1?'s':''}</strong>
+      </div>
+    </div>`;
+    return;
+  }
+  const pm2Base = useFixedListe1 ? liste1Price : getPWithTaux(cat, ti, currentListe, calcTauxL2, calcTauxL3);
+
+  const maj=Math.max(0,parseFloat(document.getElementById('inp-maj')?.value)||0);
+  const pm2=pm2Base*(1+maj/100);
+  const tot=pm2*sTot;
+  const majLabel=maj>0?`<span style="font-size:12px;color:#f59e0b;margin-left:8px">+${f2(maj)}% majoration</span>`:'';
+  const liste1Label=useFixedListe1?`<span style="font-size:11px;color:#E2FD48;margin-left:8px">Prix fixe L1</span>`:'';
+  cont.innerHTML=`<div class="result-panel">
+    <div class="result-grid">
+      <div><div class="r-label">Surface / tôle</div><div class="r-value">${f3(sT)}<span class="unit">m²</span></div></div>
+      <div><div class="r-label">Surface totale</div><div class="r-value">${f2(sTot)}<span class="unit">m²</span></div></div>
+      <div><div class="r-label">Tranche</div><div style="margin-top:4px"><span class="tranche-badge">${useFixedListe1?'Prix fixe':TRANCHES[ti].label}</span></div></div>
+      <div><div class="r-label">Prix au m²</div><div class="r-value">${f2(pm2)}<span class="unit">€/m²</span>${majLabel}${liste1Label}</div></div>
+    </div>
+    <div class="divider"></div>
+    <div class="total-row">
+      <div>
+        <div class="total-lbl">Prix total HT</div>
+        <div class="total-desc">${qty} tôle${qty>1?'s':''} × ${f2(pm2)} €/m² × ${f3(sT)} m²${maj>0?` <span style="color:#f59e0b">(base ${f2(pm2Base)} €/m² + ${f2(maj)}%)</span>`:''}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="total-price">${f2(tot)} €</div>
+        <div class="total-ht">Hors Taxes</div>
+      </div>
+    </div>
+    ${deroulage ? `<div style="margin:14px 0;padding:12px 14px;border-radius:8px;background:rgba(226,253,72,0.05);border:1px solid rgba(226,253,72,0.2)">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#E2FD48;margin-bottom:8px">🔧 Forfait déroulage inclus</div>
+      ${(()=>{const d=calcDeroulage(qty,larg,cat.ep);return `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;color:var(--muted)">
+          <div>Palettes : <strong style="color:var(--text)">${d.nb_palettes}</strong></div>
+          <div>${d.meme_bobine?'<span style="color:#E2FD48">✓ Même bobine −50%</span>':'Bobine nouvelle'}</div>
+          <div>Emballage : <strong style="color:var(--text)">${f2(d.forfait_B)} €</strong></div>
+          <div>Déroulage : <strong style="color:var(--text)">${f2(d.forfait_C)} €</strong></div>
+        </div>
+        <div style="margin-top:8px;font-size:13px;font-weight:700;color:var(--white)">Total forfait : ${f2(d.total)} € HT</div>
+      `;})()} 
+    </div>` : ''}
+    <button class="add-btn" id="add-btn" onclick="addToCart('${catId}',${long},${larg},${qty},${pm2},${sT},${sTot},${tot},'${TRANCHES[ti].label}',${maj},${deroulage})">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Ajouter au devis
+    </button>
+  </div>`;}
+function setDim(w,v){document.getElementById(w==='long'?'inp-long':'inp-larg').value=v;calculate();}
+function onEpL3Change(){
+  // Recalcule la catégorie et le prix quand l'épaisseur Liste 3 change
+  const epSel = document.getElementById('inp-ep-l3');
+  const ral   = window._selectedRAL;
+  if(!ral || !epSel) return;
+  const epNew = parseFloat(epSel.value);
+  const newCatId = articleToCatId(epNew, ral.liste, ral.groupe, ral.fin);
+  // Mise à jour du cat-display
+  const cat = newCatId ? CATEGORIES.find(c=>c.id===newCatId) : null;
+  const catDisplay = document.getElementById('cat-display');
+  if(cat){
+    catDisplay.style.color = 'var(--text)';
+    catDisplay.innerHTML = `<span style="font-weight:600">${cat.label}</span>`;
+  }
+  document.getElementById('sel-cat').value = newCatId || '';
+  // Mise à jour du badge épaisseur
+  const epLabel = epNew===1.0?'10/10':epNew===1.5?'15/10':'20/10';
+  const sel = document.getElementById('ral-selected');
+  if(sel){
+    sel.innerHTML = `<span class="tranche-badge" style="font-size:11px">RAL ${ral.ral}</span>
+      <span style="margin-left:8px">${epLabel} · ${ral.fin} · Liste ${ral.liste}${ral.groupe?' · Gr.'+ral.groupe:''}</span>`;
+  }
+  // Mettre à jour _selectedRAL avec la nouvelle épaisseur
+  window._selectedRAL = {...ral, ep:epNew};
+  calculate();
+}
+function handleQtyInput(el){
+  if(el.dataset.liste1 === '1'){
+    const newVal = parseInt(el.value) || 60;
+    if(newVal !== 60){
+      const confirmed = confirm(
+        '⚠️ La Liste 1 se vend uniquement par palette de 60 tôles minimum en format 1500×3000mm.\n\nVoulez-vous quand même modifier la quantité ?'
+      );
+      if(!confirmed){
+        el.value = 60;
+      }
+    }
+  }
+  calculate();
+}
+function setFormat(l,w){document.getElementById('inp-long').value=l;document.getElementById('inp-larg').value=w;calculate();}
+function setMaj(v){document.getElementById('inp-maj').value=v;calculate();}
+
+// ─── PANIER MULTI-DEVIS ──────────────────────────────────
+async function addToCart(catId,long,larg,qty,pm2,sT,sTot,tot,tranche,maj=0,hasDeroulage=false){
+  const cat=CATEGORIES.find(c=>c.id===catId);
+  const ralInfo=window._selectedRAL||{};
+  const ralNum=ralInfo.ral||''; const ralCode=ralInfo.code||''; const ralFin=ralInfo.fin||'';
+  const displayLabel=ralCode?ralCode:cat.label;
+  // Reset des taux calculateur aux valeurs par défaut après ajout
+  const inpL2r = document.getElementById('inp-taux-l2');
+  const inpL3r = document.getElementById('inp-taux-l3');
+  if(inpL2r){ inpL2r.value = asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2); delete inpL2r.dataset.touched; }
+  if(inpL3r){ inpL3r.value = asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3); delete inpL3r.dataset.touched; }
+  const totBase = tot;
+  // Calcul provisoire — sera recalculé avec le bon devis cible dans confirm*
+  const deroulageData = hasDeroulage ? calcDeroulage(qty, larg, cat.ep, null) : null;
+  const totAvecDeroulage = hasDeroulage && deroulageData ? tot + deroulageData.total : tot;
+  const item={
+    id:Date.now()+Math.random(),
+    catId, catLabel:displayLabel, group:cat.group,
+    ep:cat.ep, long, larg, qty, pm2, sT, sTot,
+    totBase,
+    tot: totAvecDeroulage,
+    tranche, pKg:S.prixKg, ralNum, ralCode, ralFin, maj,
+    deroulage: deroulageData,
+  };
+
+  if(S.devis.length===0){
+    if(item.deroulage){
+      const cfg=S.deroulage||DEROULAGE_CONFIG_DEFAULT;
+      const nb=nbPalettes(item.qty);
+      const B=cfg.forfait_emballage*nb;
+      const C=cfg.forfait_deroulage*nb;
+      item.deroulage={nb_palettes:nb,meme_bobine:false,forfait_B:parseFloat(B.toFixed(2)),forfait_C:parseFloat(C.toFixed(2)),total:parseFloat((B+C).toFixed(2))};
+      item.tot=item.totBase+item.deroulage.total;
+    }
+    const dv=await makeDevis(); dv.cart.push(item); S.devis.push(dv); S.activeDevisId=dv.id;
+    saveS(); updateBadge(); flashAddBtn('Ajouté — nouveau devis créé'); return;
+  }
+  // 1 devis ou plus : toujours proposer le choix
+  showDevisPicker(item);
+}
+
+function showDevisPicker(item){
+  window._pendingItem=item;
+  const existing=document.getElementById('devis-picker-overlay');
+  if(existing)existing.remove();
+  const opts=S.devis.map(d=>{
+    const label=d.client?.nom?`${d.num} — ${d.client.nom}`:d.num;
+    const checked=d.id===S.activeDevisId?'checked':'';
+    const lines=d.cart.length, sous=f2(d.cart.reduce((s,i)=>s+i.tot,0));
+    return `<label style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:6px;cursor:pointer;
+      border:1px solid var(--accent-border);margin-bottom:6px;transition:background .12s">
+      <input type="radio" name="picker-dv" value="${d.id}" ${checked} style="accent-color:var(--accent)">
+      <div><div style="font-weight:600;color:var(--text)">${label}</div>
+      <div style="font-size:11px;color:var(--muted)">${lines} ligne${lines!==1?'s':''} · ${sous} €</div></div>
+    </label>`;
+  }).join('');
+  const overlay=document.createElement('div');
+  overlay.id='devis-picker-overlay';
+  overlay.style.cssText='position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center';
+  overlay.innerHTML=`<div style="background:var(--card);border:1px solid var(--accent-border);border-radius:12px;padding:24px;width:380px;max-width:90vw">
+<div style="font-weight:700;font-size:16px;color:var(--white);margin-bottom:6px">Ajouter à quel devis ?</div>
+<div style="font-size:12px;color:var(--muted);margin-bottom:16px">Sélectionnez un devis existant ou créez-en un nouveau.</div>
+<div style="margin-bottom:16px">${opts}</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+  <button class="btn btn-primary" style="flex:1" onclick="confirmAddToDevis()">Ajouter à ce devis</button>
+  <button class="btn btn-ghost" style="flex:1" onclick="confirmAddToNewDevis()">+ Nouveau devis</button>
+  <button class="btn btn-ghost" style="width:100%;margin-top:4px" onclick="document.getElementById('devis-picker-overlay').remove()">Annuler</button>
+</div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
+function confirmAddToDevis(){
+  const picked=document.querySelector('input[name="picker-dv"]:checked')?.value;
+  if(!picked)return;
+  const dv=S.devis.find(d=>d.id===picked);
+  if(!dv||!window._pendingItem)return;
+  const item=window._pendingItem;
+  if(item.deroulage){
+    const cfg=S.deroulage||DEROULAGE_CONFIG_DEFAULT;
+    const nb=nbPalettes(item.qty);
+    const meme=isMemeBobine(item.larg,item.ep,dv);
+    const B=cfg.forfait_emballage*nb;
+    const C=cfg.forfait_deroulage*nb*(meme?cfg.remise_meme_bobine:1);
+    item.deroulage={nb_palettes:nb,meme_bobine:meme,forfait_B:parseFloat(B.toFixed(2)),forfait_C:parseFloat(C.toFixed(2)),total:parseFloat((B+C).toFixed(2))};
+    item.tot=item.totBase+item.deroulage.total;
+  }
+  dv.cart.push(item);
+  window._pendingItem=null;
+  document.getElementById('devis-picker-overlay')?.remove();
+  saveS(); updateBadge(); flashAddBtn(`Ajouté à ${dv.num}`);
+}
+
+async function confirmAddToNewDevis(){
+  if(!window._pendingItem)return;
+  const dv=await makeDevis();
+  const item=window._pendingItem;
+  if(item.deroulage){
+    const cfg=S.deroulage||DEROULAGE_CONFIG_DEFAULT;
+    const nb=nbPalettes(item.qty);
+    const B=cfg.forfait_emballage*nb;
+    const C=cfg.forfait_deroulage*nb;
+    item.deroulage={nb_palettes:nb,meme_bobine:false,forfait_B:parseFloat(B.toFixed(2)),forfait_C:parseFloat(C.toFixed(2)),total:parseFloat((B+C).toFixed(2))};
+    item.tot=item.totBase+item.deroulage.total;
+  }
+  dv.cart.push(item);
+  S.devis.push(dv);
+  S.activeDevisId=dv.id;
+  window._pendingItem=null;
+  document.getElementById('devis-picker-overlay')?.remove();
+  saveS(); updateBadge(); flashAddBtn('Ajouté — nouveau devis créé');
+}
+
+function flashAddBtn(msg='Ajouté au devis !'){
+  const b=document.getElementById('add-btn'); if(!b)return;
+  b.innerHTML=`✓ ${msg}`; b.style.color='var(--white)'; b.style.background='rgba(63,185,80,.25)';
+  setTimeout(()=>{ resetCalculateur(); },2000);
+}
+
+function removeFromCart(itemId,devisId){
+  const dv=S.devis.find(d=>d.id===devisId); if(!dv)return;
+  dv.cart=dv.cart.filter(i=>i.id!==itemId);
+  saveS(); updateBadge();
+  if(document.getElementById('view-devis').style.display!=='none')renderDevis();
+}
+
+async function newDevis(){
+  saveActiveDevisForm();
+  const dv=await makeDevis(); S.devis.push(dv); S.activeDevisId=dv.id;
+  saveS(); updateBadge(); renderDevis();
+}
+
+function closeDevis(id){
+  if(!confirm('Fermer ce devis ? Les données seront perdues.'))return;
+  const _dvToClose = S.devis.find(d=>d.id===id);
+  if(_dvToClose && _dvToClose.cart?.length) sauvegarderHistorique(_dvToClose, 'supprime');
+  S.devis=S.devis.filter(d=>d.id!==id);
+  if(S.activeDevisId===id) S.activeDevisId=S.devis.length?S.devis[S.devis.length-1].id:null;
+  saveS(); updateBadge(); renderDevis();
+}
+
+function switchDevis(id){
+  saveActiveDevisForm();
+  S.activeDevisId=id; saveS(); renderDevis();
+}
+
+function saveActiveDevisForm(){
+  const dv=activeDevis(); if(!dv)return;
+  const g=i=>document.getElementById(i)?.value||'';
+  const gb=i=>document.getElementById(i)?.checked||false;
+  const gn=i=>parseFloat(document.getElementById(i)?.value)||0;
+  dv.client={nom:g('c-nom'),soc:g('c-soc'),adr:g('c-adr'),ville:g('c-ville'),
+              tel:g('c-tel'),mail:g('c-mail'),ref:g('c-ref')};
+  dv.meta={date:g('d-date'),val:g('d-val'),delai:g('d-delai'),pmt:g('d-pmt'),notes:g('d-notes')};
+  dv.extras={liv:{on:gb('chk-liv'),val:gn('val-liv')},
+              pal:{on:gb('chk-pal'),val:gn('val-pal')},
+              rem:{on:gb('chk-rem'),val:gn('val-rem')}};
+}
+
+function updateBadge(){
+  const total=S.devis.reduce((s,d)=>s+d.cart.length,0);
+  const b=document.getElementById('cart-badge');
+  b.textContent=S.devis.length>1?S.devis.length:total;
+  b.classList.toggle('show',total>0||S.devis.length>1);
+}
+
+// ─── VUE DEVIS ───────────────────────────────────────────
+async function chargerHistorique(){
+  const s = getSession();
+  if(!s) return [];
+  try {
+    const rows = await sbFetch('historique_devis', {
+      filters: `commercial_code=eq.${encodeURIComponent(s.code)}&order=created_at.desc&limit=50`
+    });
+    return Array.isArray(rows) ? rows : [];
+  } catch(e){
+    console.warn('chargerHistorique failed:', e);
+    return [];
+  }
+}
+
+async function setSidebarFiltre(filtre){
+  window._sidebarFiltre = filtre;
+  if(filtre !== 'encours'){
+    const tous = await chargerHistorique();
+    window._sidebarHistorique = (tous||[]).filter(h=>h.statut===filtre);
+  } else {
+    window._sidebarHistorique = [];
+  }
+  renderDevis();
+}
+
+function renderDevis(){
+  const cont=document.getElementById('devis-content');
+
+  // Aucun devis du tout
+  if(S.devis.length===0){
+    cont.innerHTML=`<div class="empty" style="padding:60px 20px">
+      <div class="empty-icon">🧾</div>
+      <p style="margin-bottom:20px">Aucun devis en cours.<br>Calculez des tôles pour commencer.</p>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="btn btn-primary" onclick="showView('commercial')">← Aller au calculateur</button>
+        <button class="btn btn-ghost" onclick="newDevis()">+ Nouveau devis vide</button>
+      </div></div>`;
+    return;
+  }
+
+  // S'assurer qu'un devis est actif
+  if(!S.activeDevisId||!S.devis.find(d=>d.id===S.activeDevisId))
+    S.activeDevisId=S.devis[S.devis.length-1].id;
+
+  const dv=activeDevis();
+
+  // ── Sidebar ──
+  const _filtreActif = window._sidebarFiltre || 'encours';
+  const _histItems = window._sidebarHistorique || [];
+
+  const sidebarItemsEncours = S.devis.map(d=>{
+    const isActive=d.id===S.activeDevisId;
+    const label=d.client?.nom?`${d.client.nom}${d.client.soc?' — '+d.client.soc:''}`:d.num;
+    const sous=f2(d.cart.reduce((s,i)=>s+i.tot,0));
+    return `<div onclick="switchDevis('${d.id}')" style="padding:10px 12px;border-radius:8px;cursor:pointer;margin-bottom:4px;
+    border:1px solid ${isActive?'#3b82f6':'rgba(59,130,246,.25)'};
+    background:${isActive?'rgba(37,99,235,.18)':'rgba(37,99,235,.06)'};transition:all .15s">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:4px">
+      <div style="font-size:12px;font-weight:700;color:${isActive?'#60a5fa':'#93c5fd'}">${d.num}</div>
+      <button onclick="event.stopPropagation();closeDevis('${d.id}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;padding:0 2px" title="Fermer">✕</button>
+    </div>
+    <div style="font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">${label}</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:3px">${d.cart.length} ligne${d.cart.length!==1?'s':''} · ${sous} €</div>
+  </div>`;
+  }).join('') || `<div style="font-size:11px;color:var(--muted);padding:8px 4px;text-align:center">Aucun devis en cours</div>`;
+
+  const sidebarItemsHist = _histItems.length > 0 ? _histItems.map(h=>{
+    const isTel = h.statut === 'telecharge';
+    const bg = isTel ? 'rgba(34,197,94,.08)' : 'rgba(239,68,68,.08)';
+    const border = isTel ? 'rgba(34,197,94,.3)' : 'rgba(239,68,68,.3)';
+    const color = isTel ? '#4ade80' : '#f87171';
+    const icon = isTel ? '↓' : '✕';
+    const label = h.client_soc || h.client_nom || '—';
+    const date = h.created_at ? new Date(h.created_at).toLocaleDateString('fr-FR') : '';
+    return `<div style="padding:10px 12px;border-radius:8px;margin-bottom:4px;border:1px solid ${border};background:${bg}">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:4px">
+      <div style="font-size:12px;font-weight:700;color:${color}">${icon} ${h.devis_num}</div>
+      <div style="font-size:10px;color:var(--muted)">${date}</div>
+    </div>
+    <div style="font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">${label}</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:3px">${h.nb_lignes} ligne${h.nb_lignes!==1?'s':''} · ${f2(h.montant_ht)} €</div>
+  </div>`;
+  }).join('') : `<div style="font-size:11px;color:var(--muted);padding:8px 4px;text-align:center">Historique indisponible</div>`;
+
+  const sidebarItems = _filtreActif === 'encours' ? sidebarItemsEncours : sidebarItemsHist;
+
+  const sidebar=`<div style="width:240px;flex-shrink:0;position:sticky;top:70px;max-height:calc(100vh - 90px);overflow-y:auto;">
+    <div style="display:flex;gap:4px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #E2FD48">
+      <button onclick="setSidebarFiltre('encours')" style="flex:1;padding:4px 2px;border-radius:6px;border:none;cursor:pointer;font-size:10px;font-weight:700;letter-spacing:.05em;background:${_filtreActif==='encours'?'#3b82f6':'rgba(255,255,255,.08)'};color:${_filtreActif==='encours'?'#fff':'var(--muted)'}">EN COURS</button>
+      <button onclick="setSidebarFiltre('telecharge')" style="flex:1;padding:4px 2px;border-radius:6px;border:none;cursor:pointer;font-size:10px;font-weight:700;letter-spacing:.05em;background:${_filtreActif==='telecharge'?'#22c55e':'rgba(255,255,255,.08)'};color:${_filtreActif==='telecharge'?'#fff':'var(--muted)'}">TÉLÉCHARGÉS</button>
+      <button onclick="setSidebarFiltre('supprime')" style="flex:1;padding:4px 2px;border-radius:6px;border:none;cursor:pointer;font-size:10px;font-weight:700;letter-spacing:.05em;background:${_filtreActif==='supprime'?'#ef4444':'rgba(255,255,255,.08)'};color:${_filtreActif==='supprime'?'#fff':'var(--muted)'}">SUPPRIMÉS</button>
+    </div>
+    ${sidebarItems}
+    <button class="btn btn-ghost" onclick="newDevis()" style="width:100%;margin-top:8px;font-size:12px;padding:8px">
+      + Nouveau devis
+    </button>
+  </div>`;
+
+  // ── Formulaire du devis actif ──
+  const sous=dv.cart.reduce((s,i)=>s+i.tot,0);
+  const lignes=dv.cart.length?dv.cart.map(item=>`<tr>
+    <td><div style="font-weight:500;color:var(--text)">${item.catLabel}</div>
+        <div style="font-size:11px;color:var(--muted)">${item.ep}mm · ${item.long}×${item.larg}mm${item.maj>0?` · <span style="color:#f59e0b">+${f2(item.maj)}%</span>`:''}</div>
+        ${item.deroulage?`<div style="font-size:11px;color:#E2FD48;margin-top:3px">🔧 Déroulage · ${item.deroulage.nb_palettes} palette${item.deroulage.nb_palettes>1?'s':''}${item.deroulage.meme_bobine?' · même bobine −50%':''} · Forfait : ${f2(item.deroulage.total)} €</div>`:''}
+    </td>
+    <td style="text-align:center">${item.qty}</td>
+    <td style="text-align:right;line-height:1.4"><span style="font-size:10px;color:var(--muted);display:block">m²/tôle</span>${f2(item.sT)}</td>
+    <td style="text-align:right;line-height:1.4"><span style="font-size:10px;color:var(--muted);display:block">m² total</span>${f2(item.sTot)}</td>
+    <td style="text-align:right">${f2(item.pm2)} €</td>
+    <td class="price-cell">
+      ${item.deroulage?`<div>${f2(item.totBase)} €</div><div style="font-size:10px;color:#E2FD48">+${f2(item.deroulage.total)} €</div><div style="font-weight:700">${f2(item.tot)} €</div>`:`${f2(item.tot)} €`}
+    </td>
+    <td style="text-align:center"><button class="remove-line" onclick="removeFromCart(${item.id},'${dv.id}')">✕</button></td>
+  </tr>`).join(''):`<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">Aucune ligne — ajoutez des tôles depuis le calculateur</td></tr>`;
+
+  const c=dv.client||{}, m=dv.meta||{}, e=dv.extras||{};
+
+  const form=`
+    <div class="info-bar">
+      <div class="dot"></div>
+      <span><strong>${dv.cart.length}</strong> ligne${dv.cart.length!==1?'s':''} · Sous-total : <strong>${f2(sous)} €</strong></span>
+      <button class="btn" style="margin-left:auto;padding:5px 14px;font-size:13px;background:#E2FD48;color:#0E2A33;border:none;font-weight:700;border-radius:20px" onclick="showView('commercial')">+ Ajouter des tôles</button>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span class="section-num">1</span> Informations du devis</div>
+      <div class="grid-3">
+        <div class="fgroup"><label>N° de devis</label><input type="text" id="d-num" value="${dv.num}" readonly style="opacity:.6;cursor:not-allowed"></div>
+        <div class="fgroup"><label>Date</label><input type="date" id="d-date" value="${m.date||new Date().toISOString().slice(0,10)}" oninput="autoSaveForm()"></div>
+        <div class="fgroup"><label>Valable jusqu'au</label><input type="date" id="d-val" value="${m.val||todayPlus(S.defaults.validite)}" oninput="autoSaveForm()"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span class="section-num">2</span> Client</div>
+      <div class="grid-2">
+        <div class="fgroup"><label>Nom / Prénom</label><input type="text" id="c-nom" value="${c.nom||''}" placeholder="Jean Dupont" oninput="autoSaveForm()"></div>
+        <div class="fgroup"><label>Société</label><input type="text" id="c-soc" value="${c.soc||''}" placeholder="Nom de l'entreprise" oninput="autoSaveForm()"></div>
+        <div class="fgroup span-2"><label>Adresse</label><input type="text" id="c-adr" value="${c.adr||''}" placeholder="Rue, n°..." oninput="autoSaveForm()"></div>
+        <div class="fgroup"><label>CP / Ville</label><input type="text" id="c-ville" value="${c.ville||''}" placeholder="42000 Saint-Étienne" oninput="autoSaveForm()"></div>
+        <div class="fgroup"><label>Téléphone</label><input type="text" id="c-tel" value="${c.tel||''}" placeholder="06 XX XX XX XX" oninput="autoSaveForm()"></div>
+        <div class="fgroup"><label>E-mail</label><input type="text" id="c-mail" value="${c.mail||''}" placeholder="client@email.com" oninput="autoSaveForm()"></div>
+        <div class="fgroup"><label>Réf. chantier / client</label><input type="text" id="c-ref" value="${c.ref||''}" placeholder="Optionnel" oninput="autoSaveForm()"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span class="section-num">3</span> Lignes de produits</div>
+      <div class="table-scroll"><table class="cart-table">
+        <thead><tr><th>Désignation</th><th style="text-align:center">Qté</th><th style="text-align:right">m²/tôle</th><th style="text-align:right">m² total</th><th style="text-align:right">€/m²</th><th style="text-align:right">Total HT</th><th></th></tr></thead>
+        <tbody>${lignes}</tbody>
+      </table></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span class="section-num">4</span> Frais supplémentaires</div>
+      <div class="extra-row">
+        <input type="checkbox" id="chk-liv" ${e.liv?.on?'checked':''} onchange="calcTotals();autoSaveForm()">
+        <label class="extra-label" for="chk-liv"><div class="el-title">Livraison</div><div class="el-sub">Frais de transport</div></label>
+        <div class="extra-amount"><input type="number" id="val-liv" placeholder="0,00" min="0" step="0.01" value="${e.liv?.val||S.defaults.prixLivraison}" oninput="calcTotals();autoSaveForm()"></div>
+        <span style="color:var(--muted);font-size:14px;width:20px">€</span>
+      </div>
+      <div class="extra-row">
+        <input type="checkbox" id="chk-pal" ${e.pal?.on?'checked':''} onchange="calcTotals();autoSaveForm()">
+        <label class="extra-label" for="chk-pal"><div class="el-title">Palette neuve</div><div class="el-sub">Conditionnement</div></label>
+        <div class="extra-amount"><input type="number" id="val-pal" placeholder="0,00" min="0" step="0.01" value="${e.pal?.val||S.defaults.prixPalette}" oninput="calcTotals();autoSaveForm()"></div>
+        <span style="color:var(--muted);font-size:14px;width:20px">€</span>
+      </div>
+      <div class="extra-row" style="border-bottom:none">
+        <input type="checkbox" id="chk-rem" ${e.rem?.on?'checked':''} onchange="calcTotals();autoSaveForm()">
+        <label class="extra-label" for="chk-rem"><div class="el-title">Remise commerciale <span style="font-size:12px;color:var(--muted)">(optionnel)</span></div></label>
+        <div class="extra-amount"><input type="number" id="val-rem" placeholder="0" min="0" max="100" step="0.5" value="${e.rem?.val||0}" oninput="calcTotals();autoSaveForm()"></div>
+        <span style="color:var(--muted);font-size:14px;width:20px">%</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span class="section-num">5</span> Conditions</div>
+      <div class="grid-2">
+        <div class="fgroup"><label>Délai de livraison</label><input type="text" id="d-delai" value="${m.delai||S.defaults.delaiLivraison}" oninput="autoSaveForm()"></div>
+        <div class="fgroup"><label>Conditions de paiement</label><input type="text" id="d-pmt" value="${m.pmt||S.defaults.condPaiement}" oninput="autoSaveForm()"></div>
+        <div class="fgroup span-2"><label>Notes / Observations</label><textarea id="d-notes" placeholder="Informations complémentaires..." oninput="autoSaveForm()">${m.notes||''}</textarea></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><span class="section-num">6</span> Récapitulatif</div>
+      <div id="totals-cont"></div>
+      <div class="actions-bar">
+        <button class="btn btn-primary" id="btn-pdf" onclick="downloadPDF()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Télécharger PDF
+        </button>
+        <button class="btn btn-danger" onclick="closeDevis('${dv.id}')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+          Fermer ce devis
+        </button>
+      </div>
+    </div>`;
+
+  cont.innerHTML=`<div style="display:flex;gap:24px;align-items:flex-start">${sidebar}<div style="flex:1;min-width:0">${form}</div></div>`;
+  calcTotals();
+}
+
+function autoSaveForm(){
+  saveActiveDevisForm(); saveS();
+  // Mettre à jour le label dans la sidebar
+  const dv=activeDevis(); if(!dv)return;
+  const label=dv.client?.nom?`${dv.client.nom}${dv.client.soc?' — '+dv.client.soc:''}`:dv.num;
+  // Refresh sidebar only
+  const items=document.querySelectorAll('[onclick^="switchDevis"]');
+  items.forEach(el=>{
+    const id=el.getAttribute('onclick').match(/'([^']+)'/)?.[1];
+    if(id===dv.id){
+      const nameEl=el.querySelectorAll('div')[1];
+      if(nameEl)nameEl.textContent=label;
+    }
+  });
+}
+
+function calcTotals(){
+  const c=document.getElementById('totals-cont'); if(!c)return;
+  const dv=activeDevis(); if(!dv)return;
+  const sousToles=dv.cart.reduce((s,i)=>s+(i.totBase||i.tot),0);
+  const sousDeroulage=dv.cart.reduce((s,i)=>s+(i.deroulage?i.deroulage.total:0),0);
+  const sous=sousToles+sousDeroulage;
+  const chkL=document.getElementById('chk-liv')?.checked;
+  const chkP=document.getElementById('chk-pal')?.checked;
+  const chkR=document.getElementById('chk-rem')?.checked;
+  const vL=chkL?(parseFloat(document.getElementById('val-liv')?.value)||0):0;
+  const vP=chkP?(parseFloat(document.getElementById('val-pal')?.value)||0):0;
+  const pR=chkR?(parseFloat(document.getElementById('val-rem')?.value)||0):0;
+  const mR=sous*(pR/100), tot=sous-mR+vL+vP;
+  let rows=`<table class="totals-table">
+    <tr><td class="t-label">Sous-total tôles HT</td><td class="t-value">${f2(sousToles)} €</td></tr>
+    ${sousDeroulage>0?`<tr><td class="t-label">Forfaits déroulage</td><td class="t-value">${f2(sousDeroulage)} €</td></tr>`:''}`;
+  if(chkR&&pR>0)rows+=`<tr><td class="t-label t-remise">Remise ${f2(pR)} %</td><td class="t-value t-remise">− ${f2(mR)} €</td></tr>`;
+  if(chkL&&vL>0)rows+=`<tr><td class="t-label">Livraison</td><td class="t-value">${f2(vL)} €</td></tr>`;
+  if(chkP&&vP>0)rows+=`<tr><td class="t-label">Palette neuve</td><td class="t-value">${f2(vP)} €</td></tr>`;
+  rows+=`</table><hr class="totals-divider">
+    <table class="totals-table"><tr><td class="total-final-label">TOTAL HT</td><td class="total-final-value">${f2(tot)} €</td></tr></table>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px">TVA 20% = ${f2(tot*0.20)} € · TTC estimé = ${f2(tot*1.20)} €</div>`;
+  c.innerHTML=rows;
+}
+
+// ─── EXPORT PDF ──────────────────────────────────────────
+function buildDevisHTML() {
+  const dv=activeDevis(); if(!dv)return '';
+  saveActiveDevisForm();
+  const sess=getSession();
+  const g=k=>dv.client?.[k]||'';
+  const m=dv.meta||{};
+  const e=dv.extras||{};
+  const num=dv.num;
+  const date=m.date||new Date().toISOString().slice(0,10);
+  const val=m.val||todayPlus(S.defaults.validite);
+  const cNom=g('nom'),cSoc=g('soc'),cAdr=g('adr'),cVille=g('ville'),cTel=g('tel'),cMail=g('mail'),cRef=g('ref');
+  const delai=m.delai||'',pmt=m.pmt||'',notes=m.notes||'';
+  const chkL=e.liv?.on, chkP=e.pal?.on, chkR=e.rem?.on;
+  const vL=chkL?(parseFloat(e.liv?.val)||0):0;
+  const vP=chkP?(parseFloat(e.pal?.val)||0):0;
+  const pR=chkR?(parseFloat(e.rem?.val)||0):0;
+  const sousToles=dv.cart.reduce((s,i)=>s+(i.totBase||i.tot),0);
+  const sousDeroulage=dv.cart.reduce((s,i)=>s+(i.deroulage?i.deroulage.total:0),0);
+  const sous=sousToles+sousDeroulage;
+  const mR=sous*(pR/100), tot=sous-mR+vL+vP;
+  const tva=tot*0.20, ttc=tot*1.20;
+  const dStr=date?new Date(date).toLocaleDateString('fr-FR'):'—';
+  const vStr=val?new Date(val).toLocaleDateString('fr-FR'):'—';
+
+  const lignes=dv.cart.map((item,idx)=>{
+    const prixTole = f2(item.totBase||item.tot);
+    const ligneTole = `<tr>
+      <td style="text-align:center;vertical-align:top;padding:10px 8px">${idx+1}</td>
+      <td style="vertical-align:top;padding:10px 8px">
+        <strong>${item.catLabel}</strong>
+        <div style="font-size:10px;color:#666;margin-top:3px;line-height:1.6">
+          Ép. ${item.ep}mm · ${item.long}×${item.larg}mm · ${item.tranche}${item.ralFin?' · '+item.ralFin:''}
+          · Surface/tôle : ${f3(item.sT)} m² · Surface totale : ${f2(item.sTot)} m²
+          ${item.maj>0?`· Majoration ${f2(item.maj)}%`:''}
+        </div>
+      </td>
+      <td style="text-align:center;vertical-align:top;padding:10px 8px">${item.qty}</td>
+      <td style="text-align:right;vertical-align:top;padding:10px 8px">${f2(item.pm2)} €</td>
+      <td style="text-align:right;vertical-align:top;padding:10px 8px;font-weight:600">${prixTole} €</td>
+    </tr>`;
+    const ligneDeroulage = item.deroulage ? `<tr style="background:#f0fdf4">
+      <td style="padding:6px 8px;text-align:center;color:#16a34a;font-size:12px">↳</td>
+      <td style="padding:6px 8px;font-size:11px;color:#16a34a">
+        <strong>Forfait déroulage</strong>
+        · ${item.deroulage.nb_palettes} palette${item.deroulage.nb_palettes>1?'s':''}
+        ${item.deroulage.meme_bobine?' · même bobine −50%':''}
+        · Emballage ${f2(item.deroulage.forfait_B)} €
+        · Déroulage ${f2(item.deroulage.forfait_C)} €
+      </td>
+      <td style="text-align:center;padding:6px 8px;font-size:11px;color:#16a34a">—</td>
+      <td style="text-align:right;padding:6px 8px;font-size:11px;color:#16a34a">—</td>
+      <td style="text-align:right;padding:6px 8px;font-size:11px;font-weight:600;color:#16a34a">${f2(item.deroulage.total)} €</td>
+    </tr>` : '';
+    return ligneTole + ligneDeroulage;
+  }).join('');
+
+  let extrasRows='';
+  if(chkR&&pR>0) extrasRows+=`<tr><td colspan="4" style="text-align:right;padding:6px 8px;color:#16a34a">Remise ${f2(pR)} %</td><td style="text-align:right;padding:6px 8px;color:#16a34a">− ${f2(mR)} €</td></tr>`;
+  if(chkL&&vL>0) extrasRows+=`<tr><td colspan="4" style="text-align:right;padding:6px 8px">Participation transport</td><td style="text-align:right;padding:6px 8px">${f2(vL)} €</td></tr>`;
+  if(chkP&&vP>0) extrasRows+=`<tr><td colspan="4" style="text-align:right;padding:6px 8px">Palette neuve</td><td style="text-align:right;padding:6px 8px">${f2(vP)} €</td></tr>`;
+
+  const html=`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Devis ${num}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,sans-serif;font-size:12px;color:#1a1a1a;background:#fff;padding:32px 40px}
+.hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px}
+.hdr-left img{height:48px;display:block;margin-bottom:10px}
+.hdr-left .s-info{font-size:10.5px;color:#444;line-height:1.8}
+.hdr-right{text-align:right}
+.hdr-right .num{font-size:22px;font-weight:900;color:#1a1a1a;margin-bottom:10px;letter-spacing:.02em}
+.hdr-right table{font-size:11px;margin-left:auto;border-collapse:collapse}
+.hdr-right td{padding:2px 6px}
+.hdr-right td:first-child{color:#888;text-align:right}
+.hdr-right td:last-child{font-weight:600;color:#1a1a1a}
+.divider{border:none;border-top:2px solid #1a1a1a;margin-bottom:24px}
+.parties{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.party-label{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:8px}
+.party-emetteur{font-size:11px;line-height:1.8;color:#333}
+.party-client{font-size:13px;line-height:1.9;color:#1a1a1a;font-weight:500}
+.party-client strong{font-size:15px;font-weight:800}
+.date-line{font-size:11px;color:#555;margin-bottom:22px}
+table.prod{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:0}
+table.prod thead tr{background:#1a1a1a;color:#fff}
+table.prod th{padding:9px 8px;font-weight:700;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+table.prod tbody tr{border-bottom:1px solid #eee}
+table.prod tbody tr:nth-child(even){background:#fafafa}
+.subtotal-row td{background:#f3f4f6;font-weight:700;padding:9px 8px;border-top:2px solid #e5e7eb}
+.bottom-section{display:flex;justify-content:space-between;align-items:flex-start;border-top:1px solid #e5e7eb}
+.tva-block{padding:14px 0;font-size:11px}
+.tva-block table{border-collapse:collapse}
+.tva-block th{background:#e5e7eb;padding:6px 12px;font-size:10px;text-align:center;font-weight:700;letter-spacing:.05em}
+.tva-block td{padding:6px 12px;text-align:center;border:1px solid #e5e7eb}
+.totals-block{padding:14px 0;min-width:240px}
+.totals-block table{width:100%;border-collapse:collapse;font-size:12px}
+.totals-block td{padding:5px 10px}
+.totals-block .lbl{color:#666;text-align:right}
+.totals-block .val{text-align:right;font-weight:500}
+.totals-block .t-final{background:#1a1a1a;color:#fff;border-radius:4px}
+.totals-block .t-final td{padding:9px 12px;font-weight:800;font-size:14px}
+.totals-block .t-final .lbl{color:#ccc}
+.conds{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+.cbox{background:#f8f9fa;border:1px solid #e5e7eb;border-radius:5px;padding:10px 12px}
+.cbox-t{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:4px}
+.notes{background:#fffbeb;border:1px solid #fde68a;border-radius:5px;padding:10px 12px;margin-bottom:16px;font-size:11px;color:#92400e}
+.signature-section{display:flex;justify-content:space-between;align-items:flex-start;margin-top:18px;padding-top:16px;border-top:1px solid #e5e7eb}
+.mention{font-size:11px;color:#444;line-height:1.7;max-width:55%}
+.cachet{text-align:right}
+.cachet-box{border:1px solid #ccc;border-radius:4px;width:160px;height:60px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#aaa;margin-left:auto;margin-bottom:6px}
+.footer{margin-top:24px;padding-top:10px;border-top:1px solid #e5e7eb;text-align:center;font-size:9.5px;color:#999;line-height:1.6}
+</style></head><body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <img src="${SOCIETE.logo}" alt="Infinimetal">
+    <div class="s-info">
+      ${SOCIETE.adresse}<br>
+      ${SOCIETE.cpVille}<br>
+      Tél : ${SOCIETE.tel}<br>
+      ${SOCIETE.email}
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="num">Devis n°${num}</div>
+    <table>
+      <tr><td>Date :</td><td>${dStr}</td></tr>
+      <tr><td>Valable jusqu'au :</td><td>${vStr}</td></tr>
+      <tr><td>Mode de règlement :</td><td>${pmt||'—'}</td></tr>
+      <tr><td>Devise :</td><td>EUR</td></tr>
+      ${cRef?`<tr><td>Réf. client :</td><td>${cRef}</td></tr>`:''}
+    </table>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="parties">
+  <div>
+    <div class="party-label">Responsable commercial</div>
+    <div class="party-emetteur">
+      <strong>${sess?.nom||SOCIETE.nom}</strong><br>
+      ${SOCIETE.adresse}<br>
+      ${SOCIETE.cpVille}<br>
+      Tél : ${sess?.tel||SOCIETE.tel}<br>
+      ${sess?.email||SOCIETE.email}<br>
+      SIRET : ${SOCIETE.siret}
+    </div>
+  </div>
+  <div>
+    <div class="party-label">Client</div>
+    <div class="party-client">
+      ${cNom?`<strong>${cNom}</strong>`:''}
+      ${cSoc?`<br>${cSoc}`:''}
+      ${cAdr?`<br>${cAdr}`:''}
+      ${cVille?`<br>${cVille}`:''}
+      ${cTel?`<br>${cTel}`:''}
+      ${cMail?`<br>${cMail}`:''}
+    </div>
+  </div>
+</div>
+
+<div class="date-line">Date d'expédition prévue : selon disponibilité</div>
+
+<table class="prod">
+  <thead>
+    <tr>
+      <th style="width:28px;text-align:center">#</th>
+      <th>Description</th>
+      <th style="text-align:center;width:60px">Quantité</th>
+      <th style="text-align:right;width:80px">PU HT</th>
+      <th style="text-align:right;width:90px">Prix HT</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${lignes}
+    <tr class="subtotal-row">
+      <td colspan="4" style="text-align:right">Sous-total tôles HT</td>
+      <td style="text-align:right">${f2(sousToles)} €</td>
+    </tr>
+    ${sousDeroulage>0?`<tr class="subtotal-row"><td colspan="4" style="text-align:right">Forfaits déroulage</td><td style="text-align:right">${f2(sousDeroulage)} €</td></tr>`:''}
+    <tr class="subtotal-row"><td colspan="4" style="text-align:right;font-weight:800;font-size:13px">Total HT</td><td style="text-align:right;font-weight:800;font-size:13px">${f2(sous)} €</td></tr>
+    ${extrasRows}
+  </tbody>
+</table>
+
+<div class="bottom-section">
+  <div class="tva-block">
+    <table>
+      <thead><tr><th>Taux TVA</th><th>Montant TVA</th></tr></thead>
+      <tbody><tr><td>20%</td><td>${f2(tva)} €</td></tr></tbody>
+    </table>
+  </div>
+  <div class="totals-block">
+    <table>
+      <tr><td class="lbl">Montant HT</td><td class="val">${f2(tot)} €</td></tr>
+      <tr><td class="lbl">Montant TVA</td><td class="val">${f2(tva)} €</td></tr>
+      <tr class="t-final"><td class="lbl">Total TTC</td><td style="text-align:right;font-weight:800">${f2(ttc)} €</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="conds">
+  <div class="cbox"><div class="cbox-t">Délai de livraison</div><p>${delai||'—'}</p></div>
+  <div class="cbox"><div class="cbox-t">Conditions de paiement</div><p>${pmt||'—'}</p></div>
+</div>
+
+${notes?`<div class="notes"><strong>Notes :</strong> ${notes}</div>`:''}
+
+<div class="signature-section">
+  <div class="mention">
+    Merci de nous retourner ce devis daté, signé et précédé de la mention <strong>"BON POUR ACCORD"</strong>.<br><br>
+    Devis non contractuel, sous réserve de disponibilité.<br>
+    Prix HT départ Civrieux (01390) · TVA 20% en sus.<br>
+    Tarif au ${dStr} · Aluminium : ${f2(S.prixKg)} €/kg
+  </div>
+  <div class="cachet">
+    <div class="cachet-box">Cachet / Signature</div>
+    <p style="font-size:10px;color:#888">Bonne réception.<br>Sincères salutations,<br><strong>${sess?.nom||SOCIETE.nom}</strong></p>
+  </div>
+</div>
+
+<div class="footer">
+  ${SOCIETE.nom} · ${SOCIETE.adresse}, ${SOCIETE.cpVille} · SIRET : ${SOCIETE.siret} · TVA : ${SOCIETE.tva||'FR79498363001'}
+</div>
+
+</body></html>`;
+  return html;
+}
+
+async function downloadPDF() {
+  if (!activeDevis()?.cart?.length) { alert('Le panier est vide.'); return; }
+  const dv = activeDevis();
+  saveActiveDevisForm();
+  const btn = document.getElementById('btn-pdf');
+  btn.disabled = true;
+  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0"/></svg> Génération…`;
+
+  try {
+    const devisHTML = buildDevisHTML();
+    const num = document.getElementById('d-num')?.value || 'devis';
+
+    // Créer un iframe caché pour rendre le HTML
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;height:1123px;border:none;visibility:hidden';
+    document.body.appendChild(iframe);
+
+    await new Promise(resolve => {
+      iframe.onload = resolve;
+      iframe.srcdoc = devisHTML;
+    });
+
+    // Attendre que les images/fonts soient chargées
+    await new Promise(r => setTimeout(r, 800));
+
+    const iDoc = iframe.contentDocument || iframe.contentWindow.document;
+    const iBody = iDoc.body;
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW = 210, pageH = 297, margin = 10;
+    const contentW = pageW - margin * 2;
+
+    // Hauteur réelle du contenu
+    const totalH = iBody.scrollHeight;
+    const scale = 794 / contentW * (25.4 / 96); // px→mm
+    const chunkPx = Math.floor(1123 * 1.5); // ~hauteur A4 rendue
+
+    let yOffset = 0;
+    let firstPage = true;
+
+    while (yOffset < totalH) {
+      const canvas = await html2canvas(iBody, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        scrollY: -yOffset,
+        windowHeight: chunkPx,
+        height: Math.min(chunkPx, totalH - yOffset),
+        y: yOffset,
+        width: 794,
+        windowWidth: 794,
+        logging: false,
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      const imgH = canvas.height / canvas.width * contentW;
+
+      if (!firstPage) pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', margin, margin, contentW, imgH);
+      firstPage = false;
+      yOffset += chunkPx;
+    }
+
+    document.body.removeChild(iframe);
+    const clientName = (dv.client?.soc || dv.client?.nom || 'client').trim();
+    const cleanClient = clientName.replace(/[^a-zA-Z0-9\u00C0-\u017E\s\-]/g, '').replace(/\s+/g, '_');
+    const safeClient = cleanClient || 'client';
+    const today = new Date();
+    const dateStr = `${String(today.getDate()).padStart(2,'0')}-${String(today.getMonth()+1).padStart(2,'0')}-${today.getFullYear()}`;
+    pdf.save(`${safeClient}_${dateStr}_devis.pdf`);
+    // Sauvegarde dans Supabase une fois le PDF téléchargé
+    await sauvegarderHistorique(dv, 'telecharge');
+
+  } catch(e) {
+    console.error(e);
+    alert('Erreur lors de la génération du PDF. Essayez à nouveau.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Télécharger PDF`;
+  }
+}
+
+// ─── CATALOGUE PDF ───────────────────────────────────────
+// Config Flask : 127.0.0.1 évite certains comportements différents de localhost.
+// Important : depuis une app HTTPS (Netlify), les appels vers http://127.0.0.1
+// peuvent être bloqués selon navigateur/politiques de sécurité.
+// En production hébergée HTTPS, prévoir un endpoint HTTPS public (proxy/API).
+const FLASK_URL = 'https://web-production-e7de6.up.railway.app';
+// checkFlask avec timeout manuel (compatible tous navigateurs)
+function checkFlask(){
+  return new Promise(resolve => {
+    const timer = setTimeout(() => resolve(false), 2000);
+    fetch(FLASK_URL + '/ping')
+      .then(r => { clearTimeout(timer); resolve(r.ok); })
+      .catch(() => { clearTimeout(timer); resolve(false); });
+  });
+}
+async function chargerHistoriqueCatalogues(){
+  const s = getSession();
+  if(!s) return [];
+  try {
+    const rows = await sbFetch('historique_catalogues', {
+      filters: `commercial_code=eq.${encodeURIComponent(s.code)}&order=created_at.desc&limit=30`
+    });
+    return Array.isArray(rows) ? rows : [];
+  } catch(e){
+    console.warn('chargerHistoriqueCatalogues failed:', e);
+    return [];
+  }
+}
+
+async function renderHistoriqueCatalogues(){
+  try {
+    const items = await chargerHistoriqueCatalogues();
+    if(!items.length) return `<div style="padding:12px;text-align:center;color:var(--muted);font-size:11px">Aucun catalogue téléchargé</div>`;
+    return items.map(h=>`<div style="padding:12px;border-radius:8px;margin-bottom:8px;border:1px solid rgba(100,150,255,.3);background:rgba(100,150,255,.04)">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:8px">
+        <div style="font-size:12px;font-weight:700;color:#6495ff">${h.client_nom}</div>
+        <div style="font-size:10px;color:var(--muted);white-space:nowrap">${h.created_at ? new Date(h.created_at).toLocaleDateString('fr-FR') : '—'}</div>
+      </div>
+      <div style="font-size:11px;color:var(--text);margin-bottom:6px">Émission: ${h.date_emission||'—'}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;font-size:10px;color:var(--muted);line-height:1.6">
+        <div><strong>Alu</strong><br>${h.prix_alu}€/kg</div>
+        <div><strong>L1</strong><br>${h.taux_l1 ?? '—'}%</div>
+        <div><strong>L2</strong><br>${h.taux_l2}%</div>
+        <div><strong>L3</strong><br>${h.taux_l3}%</div>
+        <div><strong>Laq15</strong><br>${h.laquage_15}€</div>
+        <div><strong>Laq20</strong><br>${h.laquage_20}€</div>
+      </div>
+    </div>`).join('');
+  } catch(e){
+    console.error('renderHistoriqueCatalogues failed:', e);
+    return `<div style="padding:12px;text-align:center;color:var(--muted);font-size:11px">Historique indisponible (erreur réseau)</div>`;
+  }
+}
+function renderCatalogue(){
+  const c = document.getElementById('catalogue-content');
+  // Pré-remplir avec les valeurs admin courantes
+  const prixAlu = asNonNegativeNumber(S.prixKg, BASE_PRIX_KG);
+  const tauxL1  = asNonNegativeNumber(S.tauxL1, BASE_TAUX_L1);
+  const tauxL2  = asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2);
+  const tauxL3  = asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3);
+  c.innerHTML = `
+    <div class="info-bar"><div class="dot yellow"></div>
+      <span>Génération du catalogue tarifaire PDF</span>
+    </div>
+    <div class="card">
+      <div class="card-label">Paramètres du catalogue</div>
+      <div id="flask-status" style="margin-bottom:20px;padding:12px 16px;border-radius:8px;font-size:13px;background:rgba(255,255,255,0.04);border:1px solid var(--border)">
+        <span id="flask-status-text">⏳ Vérification du serveur local...</span>
+      </div>
+      <div class="grid-2" style="margin-bottom:16px">
+        <div class="fgroup">
+          <label>Nom du client / entreprise</label>
+          <input type="text" id="cat-client" placeholder="ex: Infinimetal" value="Infinimetal">
+        </div>
+        <div class="fgroup">
+          <label>Date d'émission</label>
+          <input type="text" id="cat-date" placeholder="ex: 17 avril 2026" value="${(()=>{const d=new Date();const m=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];return d.getDate()+' '+m[d.getMonth()]+' '+d.getFullYear();})()}">
+        </div>
+        <div class="fgroup">
+          <label>Prix aluminium (€/kg)</label>
+          <input type="number" id="cat-alu" step="0.01" min="1" max="20" value="${prixAlu}">
+        </div>
+        <div class="fgroup">
+          <label>Taux LISTE 1 (%)</label>
+          <input type="number" id="cat-l1" step="0.5" min="1" max="99" value="${tauxL1}">
+        </div>
+        <div class="fgroup">
+          <label>Taux de marge Liste 2 (%)</label>
+          <input type="number" id="cat-l2" step="0.5" min="1" max="99" value="${tauxL2}">
+        </div>
+        <div class="fgroup">
+          <label>Taux de marge Liste 3 (%)</label>
+          <input type="number" id="cat-l3" step="0.5" min="1" max="99" value="${tauxL3}">
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <button class="btn btn-primary" id="btn-gen-catalogue" style="width:auto" onclick="genererCatalogue()" disabled>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Générer le PDF
+        </button>
+        <div class="success-msg" id="cat-ok" style="display:none">✓ PDF généré — téléchargement en cours</div>
+        <div class="err-msg" id="cat-err" style="display:none"></div>
+      </div>
+      <div style="margin-top:20px;padding:12px 16px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid var(--border);font-size:12px;color:var(--muted);line-height:1.8">
+        Les prix sont calculés automatiquement selon les paramètres saisis.<br>
+        Le catalogue est généré au format PDF et téléchargé directement dans votre navigateur.
+      </div>
+      <div id="cat-historique" style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1)">
+        <div class="card-label" style="margin-bottom:16px">Historique Catalogues Téléchargés</div>
+        <div id="hist-cat-content" style="min-height:80px;color:var(--muted);text-align:center;padding:12px">Chargement...</div>
+      </div>
+    </div>`;
+  renderHistoriqueCatalogues().then(html => {
+    const histContainer = document.getElementById('hist-cat-content');
+    if(histContainer) histContainer.innerHTML = html;
+  }).catch(e=>console.error('Historique catalogues init failed:', e));
+  // Vérification Flask au rendu
+  checkFlask().then(ok => {
+    const st  = document.getElementById('flask-status-text');
+    const btn = document.getElementById('btn-gen-catalogue');
+    if(ok){
+      if(st)  st.innerHTML = '✅ Serveur actif — prêt à générer';
+      if(st)  st.parentElement.style.background = 'rgba(63,185,80,0.08)';
+      if(st)  st.parentElement.style.borderColor = 'rgba(63,185,80,0.3)';
+      if(btn) btn.disabled = false;
+    } else {
+      if(st)  st.innerHTML = '⚠️ Connexion au serveur impossible — réessayez dans quelques secondes ou contactez votre administrateur';
+      if(st)  st.parentElement.style.background = 'rgba(255,100,0,0.08)';
+      if(st)  st.parentElement.style.borderColor = 'rgba(255,100,0,0.3)';
+      if(btn) btn.disabled = true;
+    }
+  });
+}
+async function sauvegarderCatalogue(client, prixAlu, tauxL1, tauxL2, tauxL3, dateEmission){
+  const s = getSession();
+  if(!s) return;
+  try {
+    await sbFetch('historique_catalogues', {
+      method: 'POST',
+      body: {
+        commercial_code: s.code,
+        commercial_nom: s.nom||'',
+        client_nom: client,
+        date_emission: dateEmission,
+        prix_alu: parseFloat(prixAlu.toFixed(2)),
+        taux_l1: parseFloat(tauxL1.toFixed(2)),
+        taux_l2: parseFloat(tauxL2.toFixed(2)),
+        taux_l3: parseFloat(tauxL3.toFixed(2)),
+        laquage_15: parseFloat(asNonNegativeNumber(S.laquage15, BASE_LAQUAGE_15).toFixed(2)),
+        laquage_20: parseFloat(asNonNegativeNumber(S.laquage20, BASE_LAQUAGE_20).toFixed(2)),
+      }
+    });
+  } catch(e){ console.warn('Historique catalogue save failed:', e); }
+}
+async function genererCatalogue(){
+  const client = document.getElementById('cat-client')?.value?.trim();
+  const alu    = parseFloat(document.getElementById('cat-alu')?.value);
+  const l1     = parseFloat(document.getElementById('cat-l1')?.value);
+  const l2     = parseFloat(document.getElementById('cat-l2')?.value);
+  const l3     = parseFloat(document.getElementById('cat-l3')?.value);
+  const btn    = document.getElementById('btn-gen-catalogue');
+  const okMsg  = document.getElementById('cat-ok');
+  const errMsg = document.getElementById('cat-err');
+  // Validation
+  if(errMsg) errMsg.style.display = 'none';
+  if(!client){
+    if(errMsg){ errMsg.textContent='Nom client requis.'; errMsg.style.display='flex'; } return;
+  }
+  if(!alu || alu <= 0 || alu > 20){
+    if(errMsg){ errMsg.textContent='Prix alu invalide (entre 1 et 20).'; errMsg.style.display='flex'; } return;
+  }
+  if(!l1 || l1 <= 0 || l1 >= 100){
+    if(errMsg){ errMsg.textContent='Taux L1 invalide (entre 1 et 99).'; errMsg.style.display='flex'; } return;
+  }
+  if(!l2 || l2 <= 0 || l2 >= 100){
+    if(errMsg){ errMsg.textContent='Taux L2 invalide (entre 1 et 99).'; errMsg.style.display='flex'; } return;
+  }
+  if(!l3 || l3 <= 0 || l3 >= 100){
+    if(errMsg){ errMsg.textContent='Taux L3 invalide (entre 1 et 99).'; errMsg.style.display='flex'; } return;
+  }
+  if(btn){ btn.disabled = true; btn.textContent = '⏳ Génération en cours...'; }
+  try{
+    const res = await fetch(FLASK_URL + '/generer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client, prix_alu: alu, taux_l1: l1, taux_l2: l2, taux_l3: l3, date_emission: document.getElementById('cat-date')?.value||'' })
+    });
+    if(!res.ok) throw new Error(`Erreur serveur : ${res.status}`);
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    const mois = new Date().toISOString().slice(0, 7);
+    a.href     = url;
+    a.download = `${client.replace(/[^a-zA-Z0-9_\-]/g,'_')}_${mois}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    await sauvegarderCatalogue(client, alu, l1, l2, l3, document.getElementById('cat-date')?.value||'');
+    if(okMsg){ okMsg.style.display='flex'; setTimeout(()=>okMsg.style.display='none', 4000); }
+  } catch(e){
+    if(errMsg){ errMsg.textContent = `Erreur : ${e.message}`; errMsg.style.display='flex'; }
+  } finally {
+    if(btn){
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Générer le PDF';
+    }
+  }
+}
+
+// ─── ADMIN ───────────────────────────────────────────────
+function renderAdmin(){
+  const c=document.getElementById('admin-content');
+  if(!S.adminAuth){c.innerHTML=`<div class="card admin-gate"><div style="font-size:40px;margin-bottom:16px">🔐</div><h2>Accès Administrateur</h2><p>Mise à jour mensuelle des tarifs et des valeurs par défaut.</p><div class="inner"><input type="password" id="pw-in" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')checkPw()"><button class="btn btn-primary" onclick="checkPw()">Accéder</button><div class="err-msg" id="pw-err"></div></div></div>`;return;}
+  renderAdminP();
+}
+function checkPw(){
+  const pw=document.getElementById('pw-in').value,ref=localStorage.getItem('plialu_pw')||ADMIN_PW;
+  if(pw===ref){
+    S.adminAuth=true;
+    startAdminTimer();
+    renderAdminP();
+  } else {
+    document.getElementById('pw-err').textContent='❌ Mot de passe incorrect.';
+  }
+}
+function renderAdminP(){
+  const c=document.getElementById('admin-content');
+  const ch=Math.abs(S.prixKg-BASE_PRIX_KG)>0.001;
+  const impactCoef = 1 + asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2) / 100;
+  c.innerHTML=`
+    <div id="admin-warn-banner" style="display:none;align-items:center;justify-content:space-between;gap:12px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#f59e0b">
+      <span>⏱ Votre session admin expire dans 2 minutes sans activité.</span>
+      <button onclick="extendAdminSession()" style="background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.5);color:#f59e0b;border-radius:6px;padding:5px 14px;cursor:pointer;font-size:12px;font-family:inherit">Prolonger</button>
+    </div>
+    <div class="info-bar"><div class="dot yellow"></div>
+      <span>Mode administrateur${S.lastUpdate?` — dernière màj : <strong>${fDT(S.lastUpdate)}</strong>`:''}</span>
+      <button onclick="logout()" style="margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;font-family:inherit">Déconnexion</button>
+    </div>
+    <div class="card">
+      <div class="card-label">Prix de l'aluminium</div>
+      <div class="grid-2" style="margin-bottom:20px">
+        <div class="stat-card"><div class="r-label">Prix actuel</div><div class="stat-num">${f2(S.prixKg)}<span class="stat-unit">€/kg</span></div><div class="stat-sub">${ch?`⚠ Modifié (base : ${f2(BASE_PRIX_KG)} €/kg)`:`✓ Grille d'origine`}</div></div>
+        <div class="stat-card"><div class="r-label">Δ impact ep. 1,5mm / m²</div><div class="stat-num">${f2((S.prixKg-BASE_PRIX_KG)*1.5*asNonNegativeNumber(S.densite, MASSE_VOL)*impactCoef)}<span class="stat-unit">€/m²</span></div><div class="stat-sub">vs grille de base (L2)</div></div>
+      </div>
+      <div class="fgroup" style="max-width:280px;margin-bottom:16px">
+        <label>Nouveau prix alu (€/kg)</label>
+        <input type="number" id="new-kg" step="0.01" min="1" max="20" value="${f2(S.prixKg).replace(',','.')}">
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Base originale : ${f2(BASE_PRIX_KG)} €/kg</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <button class="btn btn-primary" style="width:auto" onclick="savePrix()">💾 Enregistrer les tarifs</button>
+        <div class="success-msg" id="save-ok" style="display:none">✓ Tarifs mis à jour</div>
+        ${ch?`<button class="btn btn-danger" style="width:auto" onclick="resetPrix()">Remettre au prix de base</button>`:''}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Valeurs par défaut des devis</div>
+      <div class="grid-2">
+        <div class="fgroup"><label>Conditions de paiement</label><input type="text" id="def-pmt" value="${S.defaults.condPaiement}"></div>
+        <div class="fgroup"><label>Délai de livraison</label><input type="text" id="def-del" value="${S.defaults.delaiLivraison}"></div>
+        <div class="fgroup"><label>Prix livraison par défaut (€)</label><input type="number" id="def-liv" value="${S.defaults.prixLivraison}" placeholder="0" min="0" step="0.01"></div>
+        <div class="fgroup"><label>Prix palette par défaut (€)</label><input type="number" id="def-pal" value="${S.defaults.prixPalette}" placeholder="0" min="0" step="0.01"></div>
+        <div class="fgroup"><label>Validité devis (jours)</label><input type="number" id="def-val" value="${S.defaults.validite}" min="1" max="180"></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;align-items:center">
+        <button class="btn btn-primary" style="width:auto" onclick="saveDef()">💾 Enregistrer les défauts</button>
+        <div class="success-msg" id="save-def-ok" style="display:none">✓ Valeurs mises à jour</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Configuration Excel & Matière</div>
+      <div class="grid-2">
+        <div class="fgroup"><label>Densité</label><input type="number" id="cfg-densite" value="${asNonNegativeNumber(S.densite, MASSE_VOL)}" min="0" step="0.01"></div>
+        <div class="fgroup"><label>Prix laquage 10/10 (€/m²)</label><input type="number" id="cfg-laquage-10" step="0.01" min="0" value="${asNonNegativeNumber(S.laquage10, BASE_LAQUAGE_10)}"></div>
+        <div class="fgroup"><label>Prix laquage 15/10 (€/m²)</label><input type="number" id="cfg-laquage-15" step="0.01" min="0" value="${asNonNegativeNumber(S.laquage15, BASE_LAQUAGE_15)}"></div>
+        <div class="fgroup"><label>Prix laquage 20/10 (€/m²)</label><input type="number" id="cfg-laquage-20" step="0.01" min="0" value="${asNonNegativeNumber(S.laquage20, BASE_LAQUAGE_20)}"></div>
+        <div class="fgroup"><label>Taux LISTE 1 (%)</label><input type="number" id="cfg-taux-l1" value="${asNonNegativeNumber(S.tauxL1, BASE_TAUX_L1)}" min="0" max="99" step="0.01"></div>
+        <div class="fgroup"><label>Taux L2 (%)</label><input type="number" id="cfg-taux-l2" value="${asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2)}" min="0" step="0.01"></div>
+        <div class="fgroup"><label>Taux L3 (%)</label><input type="number" id="cfg-taux-l3" value="${asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3)}" min="0" step="0.01"></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" style="width:auto" onclick="savePricingCfg()">💾 Enregistrer la configuration matière</button>
+        <div class="success-msg" id="save-cfg-ok" style="display:none">✓ Configuration matière mise à jour</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Configuration déroulage</div>
+      <div class="grid-2">
+        <div class="fgroup"><label>Forfait emballage (€ HT)</label><input type="number" id="cfg-der-emb" step="0.01" min="0" value="${(S.deroulage||DEROULAGE_CONFIG_DEFAULT).forfait_emballage}"></div>
+        <div class="fgroup"><label>Forfait déroulage (€ HT)</label><input type="number" id="cfg-der-der" step="0.01" min="0" value="${(S.deroulage||DEROULAGE_CONFIG_DEFAULT).forfait_deroulage}"></div>
+        <div class="fgroup"><label>Remise même bobine (%)</label><input type="number" id="cfg-der-rem" step="1" min="0" max="100" value="${Math.round((S.deroulage||DEROULAGE_CONFIG_DEFAULT).remise_meme_bobine*100)}"></div>
+        <div class="fgroup"><label>Minimum tôles déroulage</label><input type="number" id="cfg-der-min" step="1" min="1" value="${(S.deroulage||DEROULAGE_CONFIG_DEFAULT).min_toles_deroulage}"></div>
+        <div class="fgroup"><label>Tôles par palette</label><input type="number" id="cfg-der-pal" step="1" min="1" value="${(S.deroulage||DEROULAGE_CONFIG_DEFAULT).toles_par_palette}"></div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-primary" style="width:auto" onclick="saveDeroulageConfig()">💾 Enregistrer la configuration déroulage</button>
+        <div class="success-msg" id="save-der-ok" style="display:none">✓ Configuration déroulage mise à jour</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Aperçu grille — Prix/m² (4 premières tranches)</div>
+      <div class="table-scroll"><table class="preview-table" id="ptable"></table></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px">Prix en <span style="color:var(--yellow)">orange</span> = ajustés par rapport à la grille d'origine.</div>
+    </div>
+    <div id="admin-historique" style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,.1)">
+      <h2 style="font-size:18px;margin-bottom:16px;color:var(--white)">📊 Historique Devis</h2>
+      <div id="hist-content" style="min-height:100px;color:var(--muted);text-align:center;padding:16px">Chargement...</div>
+    </div>`;
+  renderAdminHistorique().then(html => {
+    const histContainer = document.getElementById('hist-content');
+    if(histContainer) histContainer.innerHTML = html;
+  }).catch(e=>console.error('Historique init failed:', e));
+  renderPT();
+}
+function renderPT(){
+  const t=document.getElementById('ptable');if(!t)return;
+  const cols=[0,1,2,3].map(i=>`<th style="text-align:right">${TRANCHES[i].label}</th>`).join('');
+  let rows=`<thead><tr><th>Catégorie</th>${cols}</tr></thead><tbody>`;
+
+  // Groupes dans l'ordre du PDF, avec les vrais noms présents dans CATEGORIES
+  const groupOrder=[
+    {key:'LISTE 1',          label:'LISTE 1'},
+    {key:'PRÉLAQUÉ STOCK',   label:'PRÉLAQUÉ STOCK — Liste 2'},
+    {key:'POST LAQUAGE',     label:'POST LAQUAGE — Liste 3'},
+    {key:'10/10',            label:'POST LAQUAGE — Liste 3 (suite 10/10)'},
+    {key:'20/10',            label:'20/10 tôles'},
+  ];
+
+  groupOrder.forEach(({key, label}) => {
+    const cats = CATEGORIES.filter(c => c.group === key);
+    if(!cats.length) return;
+    rows += `<tr class="group-header"><td colspan="5" style="background:#0E2A33;color:#fff;font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:7px 10px">${label}</td></tr>`;
+    cats.forEach(cat => {
+      const isL1 = cat.group === 'LISTE 1';
+      // Détection changement par groupe :
+      // L1 : orange si prix alu a changé (impact sur prix via delta linéaire)
+      // L2/L3/20/10 : orange si prix alu OU taux de marge diffèrent des bases
+      const prixAluChanged = Math.abs(asNonNegativeNumber(S.prixKg, BASE_PRIX_KG) - BASE_PRIX_KG) > 0.001;
+      const tauxL1Changed  = Math.abs(asNonNegativeNumber(S.tauxL1, BASE_TAUX_L1) - BASE_TAUX_L1) > 0.001;
+      const tauxL2Changed  = Math.abs(asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2) - BASE_TAUX_L2) > 0.001;
+      const tauxL3Changed  = Math.abs(asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3) - BASE_TAUX_L3) > 0.001;
+      const isL2 = cat.group === 'PRÉLAQUÉ STOCK';
+      const isL3 = cat.group === 'POST LAQUAGE' || cat.group === '10/10';
+      const is20 = cat.group === '20/10';
+      const changed =
+        (isL1 && (prixAluChanged || tauxL1Changed)) ||
+        (isL2 && (prixAluChanged || tauxL2Changed)) ||
+        (isL3 && (prixAluChanged || tauxL3Changed)) ||
+        (is20 && (prixAluChanged || tauxL2Changed || tauxL3Changed));
+      const cells = [0,1,2,3].map(i => {
+        const p = getP(cat, i);
+        return `<td class="price-cell${changed?' price-changed':''}" style="text-align:right">${f2(p)} €</td>`;
+      }).join('');
+      rows += `<tr><td>${cat.label} <span style="color:var(--muted);font-size:11px">(${cat.ep}mm)</span></td>${cells}</tr>`;
+    });
+  });
+
+  t.innerHTML = rows+'</tbody>';
+}
+function savePrix(){
+  const v=parseFloat(document.getElementById('new-kg').value);if(!v||v<=0||v>20)return;
+  S.prixKg=v;S.lastUpdate=Date.now();rebuildPrices();saveS();updateInfoBar();calculate();
+  const ok=document.getElementById('save-ok');if(ok){ok.style.display='flex';setTimeout(()=>ok.style.display='none',3000);}
+  renderAdminP();
+}
+function savePricingCfg(){
+  const densite   = parseFloat(document.getElementById('cfg-densite')?.value);
+  const laquage10 = parseFloat(document.getElementById('cfg-laquage-10')?.value);
+  const laquage15 = parseFloat(document.getElementById('cfg-laquage-15')?.value);
+  const laquage20 = parseFloat(document.getElementById('cfg-laquage-20')?.value);
+  const tauxL1 = parseFloat(document.getElementById('cfg-taux-l1')?.value);
+  const tauxL2 = parseFloat(document.getElementById('cfg-taux-l2')?.value);
+  const tauxL3 = parseFloat(document.getElementById('cfg-taux-l3')?.value);
+  S.densite   = asNonNegativeNumber(densite, MASSE_VOL);
+  S.laquage10 = asNonNegativeNumber(laquage10, BASE_LAQUAGE_10);
+  S.laquage15 = asNonNegativeNumber(laquage15, BASE_LAQUAGE_15);
+  S.laquage20 = asNonNegativeNumber(laquage20, BASE_LAQUAGE_20);
+  S.tauxL1 = asNonNegativeNumber(tauxL1, BASE_TAUX_L1);
+  S.tauxL2 = asNonNegativeNumber(tauxL2, BASE_TAUX_L2);
+  S.tauxL3 = asNonNegativeNumber(tauxL3, BASE_TAUX_L3);
+  rebuildPrices(); saveS(); calculate(); renderPT();
+  const ok=document.getElementById('save-cfg-ok');if(ok){ok.style.display='flex';setTimeout(()=>ok.style.display='none',3000);}
+}
+function saveDeroulageConfig(){
+  const emb = parseFloat(document.getElementById('cfg-der-emb')?.value);
+  const der = parseFloat(document.getElementById('cfg-der-der')?.value);
+  const rem = parseFloat(document.getElementById('cfg-der-rem')?.value);
+  const min = parseInt(document.getElementById('cfg-der-min')?.value);
+  const pal = parseInt(document.getElementById('cfg-der-pal')?.value);
+  if(!S.deroulage) S.deroulage = {...DEROULAGE_CONFIG_DEFAULT};
+  S.deroulage.forfait_emballage   = isNaN(emb) ? DEROULAGE_CONFIG_DEFAULT.forfait_emballage   : emb;
+  S.deroulage.forfait_deroulage   = isNaN(der) ? DEROULAGE_CONFIG_DEFAULT.forfait_deroulage   : der;
+  S.deroulage.remise_meme_bobine  = isNaN(rem) ? DEROULAGE_CONFIG_DEFAULT.remise_meme_bobine  : rem/100;
+  S.deroulage.min_toles_deroulage = isNaN(min) ? DEROULAGE_CONFIG_DEFAULT.min_toles_deroulage : min;
+  S.deroulage.toles_par_palette   = isNaN(pal) ? DEROULAGE_CONFIG_DEFAULT.toles_par_palette   : pal;
+  saveS();
+  const ok = document.getElementById('save-der-ok');
+  if(ok){ ok.style.display='flex'; setTimeout(()=>ok.style.display='none', 3000); }
+}
+function saveDef(){
+  S.defaults.condPaiement=document.getElementById('def-pmt')?.value||'';
+  S.defaults.delaiLivraison=document.getElementById('def-del')?.value||'';
+  const _liv=document.getElementById('def-liv')?.value;
+  S.defaults.prixLivraison=(_liv!==undefined&&_liv!==''&&isFinite(parseFloat(_liv)))?parseFloat(_liv):60;
+  S.defaults.prixPalette=document.getElementById('def-pal')?.value||'';
+  S.defaults.validite=parseInt(document.getElementById('def-val')?.value)||30;
+  saveS();
+  const ok=document.getElementById('save-def-ok');if(ok){ok.style.display='flex';setTimeout(()=>ok.style.display='none',3000);}
+}
+function resetPrix(){S.prixKg=BASE_PRIX_KG;S.lastUpdate=Date.now();saveS();updateInfoBar();calculate();renderAdminP();}
+function logout(){
+  S.adminAuth = false;
+  clearAdminTimer();
+  renderAdmin();
+}
+
+function startAdminTimer(){
+  clearAdminTimer();
+  _adminWarnTimer = setTimeout(() => {
+    const banner = document.getElementById('admin-warn-banner');
+    if(banner) banner.style.display = 'flex';
+  }, ADMIN_SESSION_DURATION - ADMIN_WARN_BEFORE);
+  _adminTimer = setTimeout(() => {
+    clearAdminTimer();
+    S.adminAuth = false;
+    alert('⏱ Session administrateur expirée.\nVous avez été déconnecté de l\'espace admin.');
+    renderAdmin();
+  }, ADMIN_SESSION_DURATION);
+}
+
+function clearAdminTimer(){
+  if(_adminTimer)     { clearTimeout(_adminTimer);     _adminTimer     = null; }
+  if(_adminWarnTimer) { clearTimeout(_adminWarnTimer); _adminWarnTimer = null; }
+  const banner = document.getElementById('admin-warn-banner');
+  if(banner) banner.style.display = 'none';
+}
+
+function extendAdminSession(){
+  startAdminTimer();
+  const banner = document.getElementById('admin-warn-banner');
+  if(banner) banner.style.display = 'none';
+}
+
+function resetAdminInactivity(){
+  if(!S.adminAuth) return;
+  startAdminTimer();
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────
+async function renderAdminHistorique(){
+  try {
+    const allHistorique = await sbFetch('historique_devis', {
+      filters: `order=created_at.desc&limit=100`
+    });
+    const byStatut = {
+      telecharge: (allHistorique||[]).filter(h=>h.statut==='telecharge'),
+      supprime: (allHistorique||[]).filter(h=>h.statut==='supprime'),
+    };
+    const _filtreAdminHist = window._filtreAdminHist || 'telecharge';
+
+    const renderGroup = (items, statut, color, icon) => {
+      if(!items.length) return `<div style="padding:8px;text-align:center;color:var(--muted);font-size:11px">Aucun devis ${statut}</div>`;
+      return items.map(h=>`<div style="padding:10px 12px;border-radius:8px;margin-bottom:6px;border:1px solid rgba(${color},.3);background:rgba(${color},.08)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-size:12px;font-weight:700;color:rgb(${color})">${icon} ${h.devis_num}</div>
+          <div style="font-size:10px;color:var(--muted)">${new Date(h.created_at).toLocaleDateString('fr-FR')}</div>
+        </div>
+        <div style="font-size:11px;color:var(--text);margin-bottom:3px"><strong>${h.commercial_nom||h.commercial_code}</strong> — ${h.client_soc||h.client_nom||'—'}</div>
+        <div style="font-size:11px;color:var(--muted)">${h.nb_lignes} ligne${h.nb_lignes!==1?'s':''} · ${f2(h.montant_ht)} € HT</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Ville: ${h.client_ville||'—'}</div>
+      </div>`).join('');
+    };
+
+    const html = `
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button onclick="setFiltreAdminHist('telecharge')" style="flex:1;padding:8px;border-radius:6px;border:none;cursor:pointer;font-weight:700;background:${_filtreAdminHist==='telecharge'?'#22c55e':'rgba(255,255,255,.08)'};color:${_filtreAdminHist==='telecharge'?'#fff':'var(--muted)'};font-size:12px">↓ TÉLÉCHARGÉS (${byStatut.telecharge.length})</button>
+        <button onclick="setFiltreAdminHist('supprime')" style="flex:1;padding:8px;border-radius:6px;border:none;cursor:pointer;font-weight:700;background:${_filtreAdminHist==='supprime'?'#ef4444':'rgba(255,255,255,.08)'};color:${_filtreAdminHist==='supprime'?'#fff':'var(--muted)'};font-size:12px">✕ SUPPRIMÉS (${byStatut.supprime.length})</button>
+      </div>
+      <div style="max-height:600px;overflow-y:auto;border-radius:8px;border:1px solid rgba(255,255,255,.1);padding:12px">
+        ${_filtreAdminHist === 'telecharge' ?
+          renderGroup(byStatut.telecharge, 'téléchargés', '34,197,94', '↓') :
+          renderGroup(byStatut.supprime, 'supprimés', '239,68,68', '✕')
+        }
+      </div>
+    `;
+    return html;
+  } catch(e){
+    console.error('renderAdminHistorique failed:', e);
+    return `<div style="padding:12px;text-align:center;color:var(--muted);font-size:11px">Historique indisponible (erreur réseau)</div>`;
+  }
+}
+
+async function setFiltreAdminHist(filtre){
+  window._filtreAdminHist = filtre;
+  const histContainer = document.getElementById('hist-content');
+  if(histContainer) {
+    const histHtml = await renderAdminHistorique();
+    histContainer.innerHTML = histHtml;
+  }
+}
+
+function showView(v){
+  ['commercial','devis','admin','catalogue'].forEach(x=>{
+    document.getElementById('view-'+x).style.display=v===x?'':'none';
+    document.getElementById('tab-'+x).className='nav-btn'+(v===x?' active':'');
+  });
+  if(v==='devis')renderDevis();
+  if(v==='admin')renderAdmin();
+  if(v==='catalogue')renderCatalogue();
+  if(v === 'admin' && S.adminAuth) resetAdminInactivity();
+}
+function initSel(){ /* select remplacé par affichage read-only, piloté par selectRAL() */ }
+function updateInfoBar(){
+  const ch=Math.abs(S.prixKg-BASE_PRIX_KG)>0.001;
+  document.getElementById('bar-prix-kg').textContent=f2(S.prixKg);
+  document.getElementById('dot-prix').className='dot'+(ch?' yellow':'');
+  const info=document.getElementById('bar-update-info');
+  info.textContent=S.lastUpdate?`— màj le ${fD(S.lastUpdate)}`:'';
+}
+
+
+function searchRAL(q) {
+  const dd = document.getElementById('ral-dropdown');
+  if (!q || q.length < 2) { dd.style.display='none'; return; }
+  const qu = q.toUpperCase().replace('RAL','').trim();
+  const matches = ARTICLES.filter(a =>
+    a.ral.toUpperCase().includes(qu) || a.code.toUpperCase().includes(qu)
+  ).slice(0, 50);
+  if (!matches.length) { dd.style.display='none'; return; }
+  const epLabel = ep => ep===1.0?'10/10':ep===1.5?'15/10':ep===2.0?'20/10':`${ep}mm`;
+  const finIcon = f => f==='Brillant'?'✨':f==='Satiné'?'🔲':'⭐';
+  dd.innerHTML = matches.map(a => {
+    const catId = articleToCatId(a.ep, a.liste, a.groupe, a.fin);
+    const catLabel = catId ? (CATEGORIES.find(c=>c.id===catId)?.label||'') : '—';
+    return `<div onclick="selectRAL('${a.code}')" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid rgba(48,54,61,.4);
+      display:flex;align-items:center;justify-content:space-between;gap:8px;transition:background .12s"
+      onmouseover="this.style.background='rgba(37,99,235,.1)'" onmouseout="this.style.background=''">
+      <div>
+        <span style="font-weight:600;color:var(--white)">${a.ral.length<=6?'RAL ':''}<strong>${a.ral}</strong></span>
+        <span style="margin-left:8px;font-size:12px;color:var(--muted)">${a.code}</span>
+      </div>
+      <div style="text-align:right;font-size:12px">
+        <span style="color:var(--muted)">${epLabel(a.ep)} · L${a.liste} · ${finIcon(a.fin)} ${a.fin}</span>
+      </div>
+    </div>`;
+  }).join('');
+  dd.style.display='block';
+}
+function hideRALList() {
+  const dd=document.getElementById('ral-dropdown');
+  if(dd) dd.style.display='none';
+}
+function resetCalculateur(){
+  const ralSearch = document.getElementById('ral-search');
+  if(ralSearch) ralSearch.value = '';
+  const ralSel = document.getElementById('ral-selected');
+  if(ralSel){ ralSel.style.display='none'; ralSel.innerHTML=''; }
+  const catDisplay = document.getElementById('cat-display');
+  if(catDisplay){ catDisplay.style.color='var(--muted)'; catDisplay.textContent='— Sélectionnez une référence ci-dessus —'; }
+  const selCat = document.getElementById('sel-cat');
+  if(selCat) selCat.value = '';
+  const longInput = document.getElementById('inp-long');
+  const largInput = document.getElementById('inp-larg');
+  if(longInput){ longInput.value=3000; longInput.readOnly=false; longInput.style.opacity=''; }
+  if(largInput){ largInput.value=1500; largInput.readOnly=false; largInput.style.opacity=''; }
+  const qtyInput = document.getElementById('inp-qty');
+  if(qtyInput){ qtyInput.value=20; delete qtyInput.dataset.liste1; qtyInput.style.opacity=''; }
+  const majInput = document.getElementById('inp-maj');
+  if(majInput) majInput.value=0;
+  const inpL2 = document.getElementById('inp-taux-l2');
+  const inpL3 = document.getElementById('inp-taux-l3');
+  if(inpL2){ inpL2.value=asNonNegativeNumber(S.tauxL2, BASE_TAUX_L2); delete inpL2.dataset.touched; }
+  if(inpL3){ inpL3.value=asNonNegativeNumber(S.tauxL3, BASE_TAUX_L3); delete inpL3.dataset.touched; }
+  const epWrap = document.getElementById('ep-selector-wrap');
+  const epSel = document.getElementById('inp-ep-l3');
+  if(epWrap) epWrap.style.display='none';
+  if(epSel) epSel.value='1.5';
+  const cont = document.getElementById('result-container');
+  if(cont) cont.innerHTML=`<div class="empty"><div class="empty-icon">📐</div><p>Sélectionnez une catégorie et renseignez les dimensions.</p></div>`;
+  window._selectedRAL = null;
+}
+function selectRAL(code) {
+  const a = ARTICLES.find(x=>x.code===code);
+  if(!a) return;
+  const epEffectiveEarly = (a.liste === 3) ? parseFloat(document.getElementById('inp-ep-l3')?.value || '1.5') : a.ep;
+  const catId = articleToCatId(epEffectiveEarly, a.liste, a.groupe, a.fin);
+  hideRALList();
+  document.getElementById('ral-search').value = a.code;
+
+  // Auto-fill dimensions
+  document.getElementById('inp-long').value = 3000;
+  document.getElementById('inp-larg').value = 1500;
+  // Liste 1 : forcer 60 tôles, verrouiller dimensions
+  const qtyInput = document.getElementById('inp-qty');
+  const longInput = document.getElementById('inp-long');
+  const largInput = document.getElementById('inp-larg');
+  if(a.liste === 1){
+    qtyInput.value = 60;
+    qtyInput.dataset.liste1 = '1';
+    qtyInput.style.opacity = '0.5';
+    longInput.readOnly = true;
+    largInput.readOnly = true;
+    longInput.style.opacity = '0.5';
+    largInput.style.opacity = '0.5';
+  } else {
+    if(qtyInput.dataset.liste1 === '1'){
+      qtyInput.value = 20;
+    }
+    delete qtyInput.dataset.liste1;
+    qtyInput.style.opacity = '';
+    longInput.readOnly = false;
+    largInput.readOnly = false;
+    longInput.style.opacity = '';
+    largInput.style.opacity = '';
+  }
+
+  // Set hidden catId — pour Liste 1, 7016 et 9010 ont un prix spécial
+  let resolvedCatId = catId;
+  if(a.liste === 1 && ['7016','9010'].includes(a.ral)) {
+    if(epEffectiveEarly === 1.0) resolvedCatId = 'l1_mat10_std';
+    if(epEffectiveEarly === 1.5) resolvedCatId = 'l1_mat15_std';
+    if(epEffectiveEarly === 2.0) resolvedCatId = 'v20_l12';
+  }
+  document.getElementById('sel-cat').value = resolvedCatId || '';
+
+  // Update read-only category display
+  const cat = resolvedCatId ? CATEGORIES.find(c=>c.id===resolvedCatId) : null;
+  const catDisplay = document.getElementById('cat-display');
+  if(cat) {
+    catDisplay.style.color = 'var(--text)';
+    catDisplay.innerHTML = `<span style="font-weight:600">${cat.label}</span>`;
+  } else {
+    catDisplay.style.color = 'var(--muted)';
+    catDisplay.textContent = '— Catégorie non trouvée —';
+  }
+
+  // Show selected info badge
+  const epLabel = epEffectiveEarly===1.0?'10/10':epEffectiveEarly===1.5?'15/10':epEffectiveEarly===2.0?'20/10':`${epEffectiveEarly}mm`;
+  const sel = document.getElementById('ral-selected');
+  sel.style.display='block';
+  sel.innerHTML = `<span class="tranche-badge" style="font-size:11px">${a.ral.length<=6?'RAL ':''} ${a.ral}</span>
+    <span style="margin-left:8px">${epLabel} · ${a.fin} · Liste ${a.liste}${a.groupe?' · Gr.'+a.groupe:''}</span>`;
+
+  // Afficher/masquer le sélecteur d'épaisseur selon la liste
+  const epWrap = document.getElementById('ep-selector-wrap');
+  const epSel  = document.getElementById('inp-ep-l3');
+  if(a.liste === 3){
+    if(epWrap) epWrap.style.display = '';
+    // Réinitialiser à 15/10 par défaut à chaque nouveau RAL
+    if(epSel) epSel.value = '1.5';
+  } else {
+    if(epWrap) epWrap.style.display = 'none';
+  }
+  // Épaisseur effective : celle du sélecteur si Liste 3, sinon celle de l'article
+  const epEffective = (a.liste === 3 && epSel) ? parseFloat(epSel.value) : a.ep;
+  // Store for cart
+  window._selectedRAL = {code:a.code, ral:a.ral, fin:a.fin, ep:epEffective, liste:a.liste, groupe:a.groupe};
+
+  calculate();
+}
+
+// ─── LOGIN / SESSION FUNCTIONS ───────────────────────────
+async function doLogin(){
+  const code = document.getElementById('login-code').value.trim().toUpperCase();
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-err');
+  if(!code){ showLoginErr('Veuillez entrer votre code commercial.'); return; }
+  btn.textContent = 'Connexion…'; btn.style.opacity = '.6'; btn.disabled = true;
+  err.style.display = 'none';
+  try {
+    const results = await sbFetch('Commerciaux', {filters:`code=eq.${code}&select=code,nom,is_admin,Tel,email`});
+    if(!results || results.length === 0){
+      showLoginErr('Code commercial inconnu. Contactez votre administrateur.');
+      btn.textContent = 'Accéder →'; btn.style.opacity = '1'; btn.disabled = false;
+      return;
+    }
+    const commercial = results[0];
+    setSession({code: commercial.code, nom: commercial.nom, isAdmin: commercial.is_admin, tel: commercial.Tel||'', email: commercial.email||'', loginAt: Date.now()});
+    loadS(); rebuildPrices(); updateInfoBar(); updateBadge();
+    showApp();
+  } catch(e) {
+    showLoginErr('Erreur de connexion. Vérifiez votre connexion internet.');
+    btn.textContent = 'Accéder →'; btn.style.opacity = '1'; btn.disabled = false;
+  }
+}
+
+function showLoginErr(msg){
+  const e = document.getElementById('login-err');
+  e.textContent = msg; e.style.display = 'block';
+}
+
+function showApp(){
+  document.getElementById('login-screen').style.display = 'none';
+  document.querySelector('header').style.display = '';
+  document.querySelector('main').style.display = '';
+  // Affiche nom du commercial dans le header
+  const s = getSession();
+  if(s){
+    let badge = document.getElementById('user-badge');
+    if(!badge){
+      badge = document.createElement('div');
+      badge.id = 'user-badge';
+      badge.style.cssText = 'display:flex;align-items:center;gap:10px;margin-left:auto';
+      badge.innerHTML = `<span style="font-size:12px;color:#9ca3af">Bonjour, <strong style="color:#fff">${s.nom}</strong></span>
+        <button onclick="doLogout()" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+        border-radius:6px;color:#9ca3af;font-size:11px;padding:4px 10px;cursor:pointer;font-family:inherit">
+        Déconnexion</button>`;
+      document.querySelector('header').appendChild(badge);
+    }
+  }
+  // Renouvellement session à chaque interaction
+  document.addEventListener('click', touchSession);
+  document.addEventListener('keydown', touchSession);
+}
+
+function doLogout(){
+  if(!confirm('Se déconnecter ? Vos devis en cours sont sauvegardés.')) return;
+  clearSession();
+  document.getElementById('user-badge')?.remove();
+  document.querySelector('header').style.display = 'none';
+  document.querySelector('main').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-code').value = '';
+  document.getElementById('login-err').style.display = 'none';
+  document.getElementById('login-btn').textContent = 'Accéder →';
+  document.getElementById('login-btn').disabled = false;
+}
+
+// ─── SAUVEGARDE DEVIS DANS SUPABASE ───────────────────────
+async function sauvegarderHistorique(dv, statut){
+  const s = getSession();
+  if(!s) return;
+  try {
+    const lignes = (dv.cart||[]).map(item=>({
+      ref: item.catLabel,
+      qty: item.qty,
+      ep: item.ep,
+      long: item.long,
+      larg: item.larg,
+      tot: item.tot,
+      totBase: item.totBase||item.tot,
+      deroulage: item.deroulage||null,
+    }));
+    const sousToles = (dv.cart||[]).reduce((s,i)=>s+(i.totBase||i.tot),0);
+    const sousDeroulage = (dv.cart||[]).reduce((s,i)=>s+(i.deroulage?i.deroulage.total:0),0);
+    const montant_ht = sousToles + sousDeroulage;
+    await sbFetch('historique_devis', {
+      method: 'POST',
+      body: {
+        commercial_code: s.code,
+        commercial_nom: s.nom||'',
+        devis_num: dv.num,
+        client_nom: dv.client?.nom||'',
+        client_soc: dv.client?.soc||'',
+        client_ville: dv.client?.ville||'',
+        montant_ht: parseFloat(montant_ht.toFixed(2)),
+        nb_lignes: (dv.cart||[]).length,
+        lignes: lignes,
+        statut: statut,
+      }
+    });
+  } catch(e){ console.warn('Historique save failed:', e); }
+}
+
+// ─── BOOT ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function boot(){
+  // Masquer app par défaut
+  document.querySelector('header').style.display = 'none';
+  document.querySelector('main').style.display = 'none';
+
+  if(isSessionValid()){
+    touchSession();
+    loadS(); rebuildPrices(); initSel(); updateInfoBar(); updateBadge();
+    showApp();
+  } else {
+    clearSession();
+    document.getElementById('login-screen').style.display = 'flex';
+  }
+  // Réinitialiser le timer admin sur toute interaction dans la vue admin
+  document.getElementById('view-admin')?.addEventListener('click',  () => resetAdminInactivity());
+  document.getElementById('view-admin')?.addEventListener('keydown', () => resetAdminInactivity());
+});
+</script>
+
+
+</body></html>
